@@ -1,0 +1,11 @@
+For running the django server, you'll need to do the following.
+
+Install venv.
+
+Use the command: source venv/bin/activate
+
+The packages needed can be found and edited in requirements.txt
+
+Use pip (or sudo pip) install -r requirements.txt
+
+Then, you're good to go with django.
