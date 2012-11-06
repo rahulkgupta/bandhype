@@ -1,24 +1,68 @@
 import json
+import urllib
 
-f = open('city-db.txt', 'r')
-r = open('city-location-test-data.txt', 'r')
+f = open('city-location-test-data.txt', 'r')
+o = open('city-location-test-data-output.txt', 'w')
+MapQuest_API_KEY = """Fmjtd%7Cluuanua7n0%2C85%3Do5-96b054"""
 
-try:
-    city_db = json.loads(f.read())
-except:
-    print "city-db did not load correctly."
+""" 
+Uses MapQuest API to reverse geocode. 
+Takes in a latitude & longitude and outputs a dictionary with "city", "county", and "state" keys.
+"""
+def reverse_geocode(latitude, longitude):
+    api_call = "http://www.mapquestapi.com/geocoding/v1/reverse?key=" + MapQuest_API_KEY + "&lat=" + str(latitude) + "&lng=" + str(longitude) + "&callback=renderReverse"
+    city = ""
+    county = ""
+    state = ""
+    try:
+        response = urllib.urlopen(api_call).read()
+        response_JSON = json.loads(response[response.find("{"):response.rfind("}")+1])
 
-def find_city(latitude, longitude):
-    for city, info in city_db.items():
-        if(((max(info["latitude_range"]) > latitude) and (latitude > min(info["latitude_range"]))) 
-            and ((max(info["longitude_range"]) > longitude) and (longitude > min(info["longitude_range"])))):
-            print city
-    #return "Corresponding city could not be found!"
+        """Uncomment the line below to view the JSON format"""
+        # print json.dumps(response_JSON, sort_keys=True, indent=4)
 
-for line in r:
-    data = line.split("\t")
-    lonlat = eval(data[1])
-    find_city(lonlat[1], lonlat[0])        
+        location = response_JSON["results"][0]["locations"][0]
+        city = location["adminArea5"]
+        county = location["adminArea4"]
+        state = location["adminArea3"]
+    except:
+        pass
+    return {"city": city, "county": county, "state": state}
+
+if __name__ == "__main__":
+    for line in f:
+        data = line.split("\t")
+        lonlat = eval(data[1])
+        locations_dict = reverse_geocode(lonlat[1], lonlat[0])
+        data.append(locations_dict["city"])
+        data.append(locations_dict["county"])
+        data.append(locations_dict["state"])
+        try:
+            o.write("\t".join(data) + "\n")
+        except:
+            pass
+
+""" This code uses the city-db JSON to determine the cities of the tweets. """
+# f = open('city-db.txt', 'r')
+# r = open('city-location-test-data.txt', 'r')
+
+# try:
+#     city_db = json.loads(f.read())
+# except:
+#     print "city-db did not load correctly."
+
+# def find_city(latitude, longitude):
+#     for city, info in city_db.items():
+#         if(((max(info["latitude_range"]) > latitude) and (latitude > min(info["latitude_range"]))) 
+#             and ((max(info["longitude_range"]) > longitude) and (longitude > min(info["longitude_range"])))):
+#             print city
+#     #return "Corresponding city could not be found!"
+
+# for line in r:
+#     data = line.split("\t")
+#     lonlat = eval(data[1])
+#     find_city(lonlat[1], lonlat[0])   
+     
 
 """This code was used to filter for only US cities in CityCoordinatesList.txt"""
 # f = open('CityCoordinatesList.txt')
