@@ -8,7 +8,10 @@ urlpatterns = patterns('',
     # Examples:
     url(r'^$', 'bands.views.home', name='home'),
     url(r'^promoters$', 'bands.views.promoters'),
-    url(r'^bands$', 'bands.views.bands')
+    url(r'^bands$', 'bands.views.bands'),
+    url(r'^counties$', 'bands.views.counties'),
+    url(r'^states$', 'bands.views.states'),
+    url(r'^unemployment$', 'bands.views.unemployment'),
     # url(r'^bandhype/', include('bandhype.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:

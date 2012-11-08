@@ -10,6 +10,7 @@
     <!-- Le styles -->
     <link href="{{STATIC_URL}}css/bootstrap.css" rel="stylesheet">
     <link href="{{STATIC_URL}}css/home.css" rel="stylesheet">
+  <script type="text/javascript" src="{{STATIC_URL}}js/d3.v2.min.js"></script>
     <style type="text/css">
       body {
         padding-top: 20px;
@@ -106,7 +107,8 @@
       <!-- Jumbotron -->
       <h2>Analytics for Bands and Promoters</h2>
         <p class="lead">Bandhype provides geographical analytics based on twitter data to give bands insight where they are most popular and promoters insight on which bands are the most popular in their area.</p>
-
+      <div id="chart"></div>
+      <script type="text/javascript" src="{{STATIC_URL}}js/choropleth.js"></script>
 
       <!-- Example row of columns -->
       <hr>
@@ -114,7 +116,7 @@
       <div class="footer">
         <p>&copy; I290 2012</p>
       </div>
-
+      
     </div> <!-- /container -->
 
     <!-- Le javascript
