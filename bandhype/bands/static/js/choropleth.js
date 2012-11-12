@@ -38,15 +38,18 @@ d3.json("states", function(json) {
           .enter().append("path")
           .attr("d", path);
 });
-
-d3.json("countrypop?query=taylor swift", function(json) {
-     data = json;
-     counties.selectAll("path")
-          .attr("class", quantize);
-});
+$('#search-btn').on('click', function(e){
+  band = $("#search").val()
+  console.log(band)
+  d3.json("countrypop?query=" + band, function(json) {
+       data = json;
+       counties.selectAll("path")
+            .attr("class", quantize);
+  });
+})
 
 function quantize(d) {
-     return "q" + Math.min(8, ~~(data[d.id] * 9 / 12)) + "-9";
+     return "q" + Math.min(8, ~~(data[d.id])) + "-9";
 }
 
 // Function when user clicks county in the map

@@ -15,6 +15,8 @@ urlpatterns = patterns('',
     url(r'^countrypop$', 'bands.views.countrypop'),
     url(r'^fips$','bands.views.fips'),
     url(r'^bcc$','bands.views.bcc'),
+    url(r'^bsc$','bands.views.bsc'),
+    url(r'^topstate$', 'bands.views.topstate'),
     url(r'^getfips$', 'bands.views.getfips')
     # url(r'^bandhype/', include('bandhype.foo.urls')),
 

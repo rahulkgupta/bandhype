@@ -98,6 +98,30 @@ def countrypop(request):
                         
 #     return render_to_response('index.html', {},context_instance=RequestContext(request)) 
 
+# def bsc(request):
+#     states = ["AL","AK", "AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID",
+#             "IL","IN","IA","KS","KY","LA","ME","MD",
+#             "MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC",
+#             "ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT",
+#             "VA","WA","WV","WI","WY"]
+#     with open(os.path.abspath(os.path.join(os.path.dirname(__file__), 'static/banded_state_count.txt')), 'r') as bsc:
+#         for line in bsc:
+#             bsc_line = line.split(',')
+#             band_name = bsc_line[0]
+#             state = bsc_line[1]
+#             count = int(bsc_line[2])
+#             state_obj = State(name=state, count=count)
+#             if state in states:
+#                 try:
+#                     band = Band.objects.get(name=band_name)
+#                     band.states.append(state_obj)
+#                     band.save()
+#                 except:
+#                     print "failed"
+#     return render_to_response('index.html', {},context_instance=RequestContext(request))         
+
+
+
 def getfips(request):
     county = request.GET['county'].lower().replace(" ", "")
     state = request.GET['state']
@@ -110,4 +134,12 @@ def getfips(request):
         return HttpResponse(json.dumps(response), mimetype="application/json")
 
 
-
+def topstate(request):
+    state_name = request.GET['state'].upper()
+    bands = Band.objects.raw_query({"states.name" : state_name})
+    response = {}
+    for band in bands:
+        for state in band.states:
+            if state.name == state_name:
+                response[band.name] = state.count
+    return HttpResponse(json.dumps(response), mimetype="application/json")

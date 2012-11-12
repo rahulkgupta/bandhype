@@ -43,6 +43,20 @@
         padding: 14px 24px;
       }
 
+      .axis path,
+      .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+      }
+
+      .bar {
+        fill: steelblue;
+      }
+
+      .x.axis path {
+        display: none;
+      }
       /* Supporting marketing content */
       .marketing {
         margin: 60px 0;
@@ -100,16 +114,16 @@
           <li class="active"><a href="">Promoters</a></li>
           <li><a href="/bands">Bands</a></li>
         </ul>
-        <form class="pull-right">
-          <input type="text" id="search" class="search-query" placeholder="Search for a Location">
-        </form>
         
         <h3 class="muted">BandHype</h3>
         <hr>
       </div>
 
       
-      <h2>Popular Locations</h2>
+      <input type="text" id="search" class="search-query" placeholder="Search for a State"> 
+      <button id="promoter" class = "btn btn-info">Generate Chart</button>
+
+      <div id="chart"></div>
 
       <!-- Example row of columns -->
       <hr>
@@ -136,6 +150,8 @@
     <script src="{{STATIC_URL}}js/bootstrap-collapse.js"></script>
     <script src="{{STATIC_URL}}js/bootstrap-carousel.js"></script>
     <script src="{{STATIC_URL}}js/bootstrap-typeahead.js"></script>
-
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="{{STATIC_URL}}js/d3.v2.min.js"></script>
+    <script type="text/javascript" src="{{STATIC_URL}}js/barchart.js"></script>
   </body>
 </html>
