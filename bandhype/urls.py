@@ -12,6 +12,9 @@ urlpatterns = patterns('',
     url(r'^counties$', 'bands.views.counties'),
     url(r'^states$', 'bands.views.states'),
     url(r'^unemployment$', 'bands.views.unemployment'),
+    url(r'^countrypop$', 'bands.views.countrypop'),
+    url(r'^fips$','bands.views.fips'),
+    url(r'^bcc$','bands.views.bcc')
     # url(r'^bandhype/', include('bandhype.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
