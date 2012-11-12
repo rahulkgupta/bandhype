@@ -2,6 +2,8 @@
 import json
 import os
 
+import operator
+
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -142,4 +144,5 @@ def topstate(request):
         for state in band.states:
             if state.name == state_name:
                 response[band.name] = state.count
-    return HttpResponse(json.dumps(response), mimetype="application/json")
+    sorted_response = sorted(response.iteritems(), key=operator.itemgetter(1), reverse=True)
+    return HttpResponse(json.dumps(sorted_response), mimetype="application/json")

@@ -37,13 +37,14 @@ $('#promoter').on('click', function(e){
     error = true;
     var promoterlocation = $('#search').val();
     d3.json("topstate?state="+promoterlocation, function(json) {
-
+        console.log(json)
 
         var data =[];
-            for (band in json){
+            for (var i = 0; i < json.length ; i++) {
+                console.log(json[i])
                 var banddetails ={};
-                banddetails["bandname"] = band
-                banddetails["tweets"] = parseInt(json[band])
+                banddetails["bandname"] = json[i][0]
+                banddetails["tweets"] = parseInt(json[i][1])
                 data.push(banddetails);
             }
 
