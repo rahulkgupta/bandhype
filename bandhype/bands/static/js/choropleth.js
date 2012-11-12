@@ -28,7 +28,7 @@ d3.json("states", function(json) {
           .attr("d", path);
 });
 
-d3.json("countrypop?query=depeche mode", function(json) {
+d3.json("countrypop?query=taylor swift", function(json) {
      data = json;
      counties.selectAll("path")
           .attr("class", quantize);
