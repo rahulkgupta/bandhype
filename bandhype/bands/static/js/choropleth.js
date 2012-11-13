@@ -49,7 +49,7 @@ $('#search-btn').on('click', function(e){
 })
 
 function quantize(d) {
-     return "q" + Math.min(8, ~~(data[d.id])) + "-9";
+     return "q" + Math.min(9, ~~(data[d.id] * 2)) + "-9";
 }
 
 // Function when user clicks county in the map
