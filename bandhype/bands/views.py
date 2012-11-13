@@ -144,5 +144,5 @@ def topstate(request):
         for state in band.states:
             if state.name == state_name:
                 response[band.name] = state.count
-    sorted_response = sorted(response.iteritems(), key=operator.itemgetter(1), reverse=True)
+    sorted_response = sorted(response.iteritems(), key=operator.itemgetter(1), reverse=True)[:10]
     return HttpResponse(json.dumps(sorted_response), mimetype="application/json")
