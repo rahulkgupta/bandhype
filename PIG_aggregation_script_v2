@@ -1,0 +1,45 @@
+tweets = LOAD 'geo26OctArtists_v1.txt' USING PigStorage('\t') AS (band, user, longitude, latitude, time, text, city, county, state);
+
+banded = GROUP tweets BY band;
+banded_state = GROUP tweets BY (band, state);
+banded_county = GROUP tweets BY (band, state, county);
+banded_city = GROUP tweets BY (band, state, county, city);
+
+banded_count = FOREACH banded GENERATE $0 as band, COUNT(tweets) as tweetcount;
+banded_state_count = FOREACH banded_state GENERATE $0, COUNT(tweets) as tweetcount;
+banded_county_count = FOREACH banded_county GENERATE $0, COUNT(tweets) as tweetcount;
+banded_city_count = FOREACH banded_city GENERATE $0, COUNT(tweets) as tweetcount;
+
+flat_banded_state_count = FOREACH banded_state_count GENERATE FLATTEN($0), tweetcount;
+flat_banded_county_count = FOREACH banded_county_count GENERATE FLATTEN($0), tweetcount;
+flat_banded_city_count = FOREACH banded_city_count GENERATE FLATTEN($0), tweetcount;
+
+STORE flat_banded_state_count INTO '26Oct_banded_state_count' USING PigStorage(',');
+STORE flat_banded_county_count INTO '26Oct_banded_county_count' USING PigStorage(',');
+STORE flat_banded_city_count INTO '26Oct_banded_city_count' USING PigStorage(',');
+
+state_tweets = GROUP tweets BY state;
+county_tweets = GROUP tweets BY (state, county);
+city_tweets = GROUP tweets BY (state, county, city);
+
+state_count = FOREACH state_tweets GENERATE $0 as state, COUNT(tweets) as tweetcount;
+county_count = FOREACH county_tweets GENERATE $0 as countytuple, COUNT(tweets) as tweetcount;
+city_count = FOREACH city_tweets GENERATE $0 as citytuple, COUNT(tweets) as tweetcount;
+
+flat_county_count = FOREACH county_count GENERATE FLATTEN(countytuple), tweetcount;
+flat_city_count = FOREACH city_count GENERATE FLATTEN(citytuple), tweetcount;
+
+STORE state_count INTO '26Oct_state_count' USING PigStorage(',');
+STORE flat_county_count INTO '26Oct_county_count' USING PigStorage(',');
+STORE flat_city_count INTO '26Oct_city_count' USING PigStorage(',');
+
+
+
+group_banded_state_count = GROUP flat_banded_state_count BY band;
+group_banded_county_count = GROUP flat_banded_county_count BY band;
+group_banded_city_count = GROUP flat_banded_city_count BY band;
+
+STORE group_banded_state_count INTO '26Oct_group_banded_state_count' USING PigStorage(',');
+STORE group_banded_county_count INTO '26Oct_group_banded_county_count' USING PigStorage(',');
+STORE group_banded_city_count INTO '26Oct_group_banded_city_count' USING PigStorage(',');
+

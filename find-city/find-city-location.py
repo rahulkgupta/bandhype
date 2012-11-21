@@ -1,9 +1,13 @@
+#Quinn's code on reverse geo-coding for BandHype.
 import json
 import urllib
 
 """ CHANGE THESE VARIABLES ACCORDINGLY """
 input_file = 'city-location-test-data.txt'
 output_file = 'city-location-test-data-output-1.txt'
+
+f = open('city-location-test-data.txt', 'r')
+o = open('city-location-test-data-output-tmp.txt', 'w')
 MapQuest_API_KEY = """Fmjtd%7Cluuanua7n0%2C85%3Do5-96b054"""
 
 """ 
@@ -12,9 +16,11 @@ Takes in a latitude & longitude and outputs a dictionary with "city", "county", 
 """
 def reverse_geocode(latitude, longitude):
     api_call = "http://www.mapquestapi.com/geocoding/v1/reverse?key=" + MapQuest_API_KEY + "&lat=" + str(latitude) + "&lng=" + str(longitude) + "&callback=renderReverse"
+    fcc_api_call = "http://data.fcc.gov/api/block/find?format=json&latitude=" + str(latitude) + "&longitude=" + str(longitude) + "&showall=true"
     city = ""
     county = ""
     state = ""
+    fips = ""
     try:
         response = urllib.urlopen(api_call).read()
         response_JSON = json.loads(response[response.find("{"):response.rfind("}")+1])
@@ -24,11 +30,22 @@ def reverse_geocode(latitude, longitude):
 
         location = response_JSON["results"][0]["locations"][0]
         city = location["adminArea5"]
-        county = location["adminArea4"]
+        # county = location["adminArea4"] # Replaced by FCC api call 
         state = location["adminArea3"]
     except:
         pass
-    return {"city": city, "county": county, "state": state}
+    try:
+        response = urllib.urlopen(fcc_api_call).read()
+        response_JSON = json.loads(response)
+
+        """Uncomment the line below to view the JSON format"""
+        # print json.dumps(response_JSON, sort_keys=True, indent=4)
+
+        county = response_JSON["County"]["name"]
+        fips = response_JSON["County"]["FIPS"]
+    except:
+        pass
+    return {"city": city, "county": county, "state": state, "fips": fips}
 
 """ 
 This main file reads an input_file, reverse geo-codes, 
@@ -54,7 +71,7 @@ if __name__ == "__main__":
             lonlat = eval(data[1])
             locations_dict = reverse_geocode(lonlat[1], lonlat[0])
             data.append(locations_dict["city"])
-            data.append(locations_dict["county"])
+            # data.append(locations_dict["county"])
             data.append(locations_dict["state"])
             try:
                 o.write("\t".join(data) + "\n")
@@ -65,6 +82,19 @@ if __name__ == "__main__":
     except:
         print "Something went wrong in append_geo!"
         pass
+
+    for line in f:
+        data = line.split("\t")
+        lonlat = eval(data[1])
+        locations_dict = reverse_geocode(lonlat[1], lonlat[0])
+        data.append(locations_dict["city"])
+        data.append(locations_dict["county"])
+        data.append(locations_dict["state"])
+        data.append(locations_dict["fips"])
+        try:
+            o.write("\t".join(data) + "\n")
+        except:
+            pass
 
 """ This code uses the city-db JSON to determine the cities of the tweets. """
 # f = open('city-db.txt', 'r')

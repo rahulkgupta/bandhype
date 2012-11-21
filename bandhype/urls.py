@@ -6,7 +6,18 @@ from django.conf.urls.defaults import patterns, include, url
 
 urlpatterns = patterns('',
     # Examples:
-    # url(r'^$', 'bandhype.views.home', name='home'),
+    url(r'^$', 'bands.views.home', name='home'),
+    url(r'^promoters$', 'bands.views.promoters'),
+    url(r'^bands$', 'bands.views.bands'),
+    url(r'^counties$', 'bands.views.counties'),
+    url(r'^states$', 'bands.views.states'),
+    url(r'^unemployment$', 'bands.views.unemployment'),
+    url(r'^countrypop$', 'bands.views.countrypop'),
+    url(r'^fips$','bands.views.fips'),
+    url(r'^bcc$','bands.views.bcc'),
+    url(r'^bsc$','bands.views.bsc'),
+    url(r'^topstate$', 'bands.views.topstate'),
+    url(r'^getfips$', 'bands.views.getfips')
     # url(r'^bandhype/', include('bandhype.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
