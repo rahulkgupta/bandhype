@@ -1,8 +1,9 @@
 import json
 import urllib
 
-f = open('city-location-test-data.txt', 'r')
-o = open('city-location-test-data-output.txt', 'w')
+""" CHANGE THESE VARIABLES ACCORDINGLY """
+input_file = 'city-location-test-data.txt'
+output_file = 'city-location-test-data-output-1.txt'
 MapQuest_API_KEY = """Fmjtd%7Cluuanua7n0%2C85%3Do5-96b054"""
 
 """ 
@@ -29,18 +30,41 @@ def reverse_geocode(latitude, longitude):
         pass
     return {"city": city, "county": county, "state": state}
 
+""" 
+This main file reads an input_file, reverse geo-codes, 
+and appends the city, county, state before writing it to the output_file. 
+""" 
 if __name__ == "__main__":
-    for line in f:
-        data = line.split("\t")
-        lonlat = eval(data[1])
-        locations_dict = reverse_geocode(lonlat[1], lonlat[0])
-        data.append(locations_dict["city"])
-        data.append(locations_dict["county"])
-        data.append(locations_dict["state"])
-        try:
-            o.write("\t".join(data) + "\n")
-        except:
-            pass
+    try:
+        f = open(input_file, 'r')
+    except:
+        print "Error opening input file: " + input_file + "."
+        pass
+
+    try:
+        o = open(output_file, 'w')
+    except:
+        print "Error opening output file: " + output_file + "."
+        pass
+
+    try:
+        for line in f:
+            line = line.replace("\n", "") # Removes all "\n" tags
+            data = line.split("\t")
+            lonlat = eval(data[1])
+            locations_dict = reverse_geocode(lonlat[1], lonlat[0])
+            data.append(locations_dict["city"])
+            data.append(locations_dict["county"])
+            data.append(locations_dict["state"])
+            try:
+                o.write("\t".join(data) + "\n")
+            except:
+                print "Error writing the data into output file in append_geo."
+                pass
+
+    except:
+        print "Something went wrong in append_geo!"
+        pass
 
 """ This code uses the city-db JSON to determine the cities of the tweets. """
 # f = open('city-db.txt', 'r')
