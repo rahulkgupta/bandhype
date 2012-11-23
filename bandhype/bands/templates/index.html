@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>BandHype</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="{{STATIC_URL}}css/bootstrap.css" rel="stylesheet">
+    <link href="{{STATIC_URL}}css/home.css" rel="stylesheet">
+    <script type="text/javascript" src="{{STATIC_URL}}js/d3.v2.min.js"></script>
+    <style type="text/css">
+      body {
+        padding-top: 20px;
+        padding-bottom: 60px;
+      }
+
+      /* Custom container */
+      .container {
+        margin: 0 auto;
+        max-width: 1000px;
+      }
+      .container > hr {
+        margin: 60px 0;
+      }
+
+      /* Main marketing message and sign up button */
+      .jumbotron {
+        margin: 80px 0;
+        text-align: center;
+      }
+      .jumbotron h1 {
+        font-size: 100px;
+        line-height: 1;
+      }
+      .jumbotron .lead {
+        font-size: 24px;
+        line-height: 1.25;
+      }
+      .jumbotron .btn {
+        font-size: 21px;
+        padding: 14px 24px;
+      }
+
+      /* Supporting marketing content */
+      .marketing {
+        margin: 60px 0;
+      }
+      .marketing p + h4 {
+        margin-top: 28px;
+      }
+
+
+      /* Customize the navbar links to be fill the entire space of the .navbar */
+      .navbar .navbar-inner {
+        padding: 0;
+      }
+      .navbar .nav {
+        margin: 0;
+      }
+      .navbar .nav li {
+        display: table-cell;
+        width: 1%;
+        float: none;
+      }
+      .navbar .nav li a {
+        font-weight: bold;
+        text-align: center;
+        border-left: 1px solid rgba(255,255,255,.75);
+        border-right: 1px solid rgba(0,0,0,.1);
+      }
+      .navbar .nav li:first-child a {
+        border-left: 0;
+        border-radius: 3px 0 0 3px;
+      }
+      .navbar .nav li:last-child a {
+        border-right: 0;
+        border-radius: 0 3px 3px 0;
+      }
+    </style>
+    <link href="{{STATIC_URL}}css/bootstrap-responsive.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+  </head>
+
+  <body>
+
+    <div class="container">
+
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li class="active"><a href="">Home</a></li>
+          <li><a href="promoters">Promoters</a></li>
+          <li><a href="bands">Bands</a></li>
+        </ul>
+        <h3 class="muted">BandHype</h3>
+        <hr>
+      </div>
+
+      <!-- Jumbotron -->
+      <h2>Analytics for Bands and Promoters</h2>
+        <p class="lead">Bandhype provides geographical analytics based on twitter data to give bands insight where they are most popular and promoters insight on which bands are the most popular in their area.</p>
+      <script type="text/javascript" src="{{STATIC_URL}}js/choropleth.js"></script>
+
+      <!-- Example row of columns -->
+      <hr>
+
+      <div class="footer">
+        <p>&copy; I290 2012</p>
+      </div>
+      
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="{{STATIC_URL}}js/jquery.js"></script>
+    <script src="{{STATIC_URL}}js/bootstrap-transition.js"></script>
+    <script src="{{STATIC_URL}}js/bootstrap-alert.js"></script>
+    <script src="{{STATIC_URL}}js/bootstrap-modal.js"></script>
+    <script src="{{STATIC_URL}}js/bootstrap-dropdown.js"></script>
+    <script src="{{STATIC_URL}}js/bootstrap-scrollspy.js"></script>
+    <script src="{{STATIC_URL}}js/bootstrap-tab.js"></script>
+    <script src="{{STATIC_URL}}js/bootstrap-tooltip.js"></script>
+    <script src="{{STATIC_URL}}js/bootstrap-popover.js"></script>
+    <script src="{{STATIC_URL}}js/bootstrap-button.js"></script>
+    <script src="{{STATIC_URL}}js/bootstrap-collapse.js"></script>
+    <script src="{{STATIC_URL}}js/bootstrap-carousel.js"></script>
+    <script src="{{STATIC_URL}}js/bootstrap-typeahead.js"></script>
+
+  </body>
+</html>
