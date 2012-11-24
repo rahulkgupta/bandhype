@@ -11,7 +11,8 @@ from django.conf import settings
 from django.core import serializers
 
 
-from bands.models import Band, State, County, Fips
+
+
 def home(request):
     return render_to_response('index.html', {},context_instance=RequestContext(request))
 
@@ -124,25 +125,25 @@ def countrypop(request):
 
 
 
-def getfips(request):
-    county = request.GET['county'].lower().replace(" ", "")
-    state = request.GET['state']
-    try:
-        fips = Fips.objects.get(county=county, state=state)
-        response = {"response": "success", "fips": fips.county_fips}
-        return HttpResponse(json.dumps(response), mimetype="application/json")
-    except:
-        response = {"response": "failure"}
-        return HttpResponse(json.dumps(response), mimetype="application/json")
+# def getfips(request):
+#     county = request.GET['county'].lower().replace(" ", "")
+#     state = request.GET['state']
+#     try:
+#         fips = Fips.objects.get(county=county, state=state)
+#         response = {"response": "success", "fips": fips.county_fips}
+#         return HttpResponse(json.dumps(response), mimetype="application/json")
+#     except:
+#         response = {"response": "failure"}
+#         return HttpResponse(json.dumps(response), mimetype="application/json")
 
 
-def topstate(request):
-    state_name = request.GET['state'].upper()
-    bands = Band.objects.raw_query({"states.name" : state_name})
-    response = {}
-    for band in bands:
-        for state in band.states:
-            if state.name == state_name:
-                response[band.name] = state.count
-    sorted_response = sorted(response.iteritems(), key=operator.itemgetter(1), reverse=True)[:10]
-    return HttpResponse(json.dumps(sorted_response), mimetype="application/json")
+# def topstate(request):
+#     state_name = request.GET['state'].upper()
+#     bands = Band.objects.raw_query({"states.name" : state_name})
+#     response = {}
+#     for band in bands:
+#         for state in band.states:
+#             if state.name == state_name:
+#                 response[band.name] = state.count
+#     sorted_response = sorted(response.iteritems(), key=operator.itemgetter(1), reverse=True)[:10]
+#     return HttpResponse(json.dumps(sorted_response), mimetype="application/json")
