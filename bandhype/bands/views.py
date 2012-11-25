@@ -10,6 +10,7 @@ from django.template import RequestContext
 from django.conf import settings
 from django.core import serializers
 
+from bands.models import State, County
 
 
 
@@ -49,18 +50,12 @@ def countrypop(request):
         return HttpResponse("nothing")
 
 #commented out so that the requests don't get accidentally fired
-# def fips(request):
-#     with open(os.path.abspath(os.path.join(os.path.dirname(__file__), 'static/fips_use.txt')), 'r') as fips:
-#         for line in fips:
-#             print line
-#             fips_line = line.split(',')
-#             # print fips_line[0] + " "  +fips_line[3]
-#             fips = Fips(county=fips_line[1].lower(),
-#                         state=fips_line[0], 
-#                         county_fips=fips_line[3].rstrip(), state_fips=fips_line[2])
-#             fips.save()
-
-#     return render_to_response('index.html', {},context_instance=RequestContext(request))
+def fips(request):
+    for county in County.objects.all():
+        if len(county.fips) == 3:
+            county.fips = county.state.fips + county.fips
+            county.save()
+    return render_to_response('index.html', {},context_instance=RequestContext(request))
 
 # def bcc(request):
 #     with open(os.path.abspath(os.path.join(os.path.dirname(__file__), 'static/banded_county_count.txt')), 'r') as bcc:
@@ -102,10 +97,12 @@ def countrypop(request):
 #     return render_to_response('index.html', {},context_instance=RequestContext(request)) 
 
 # def bsc(request):
-#     states = ["AL","AK", "AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID",
+#     states = ["AL","AK", "AZ","AR","CA",
+#"CO","CT","DE","FL","GA","HI","ID",
 #             "IL","IN","IA","KS","KY","LA","ME","MD",
 #             "MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC",
-#             "ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT",
+#             "ND","OH","OK","OR","PA","RI",
+#"SC","SD","TN","TX","UT","VT",
 #             "VA","WA","WV","WI","WY"]
 #     with open(os.path.abspath(os.path.join(os.path.dirname(__file__), 'static/banded_state_count.txt')), 'r') as bsc:
 #         for line in bsc:
@@ -147,3 +144,17 @@ def countrypop(request):
 #                 response[band.name] = state.count
 #     sorted_response = sorted(response.iteritems(), key=operator.itemgetter(1), reverse=True)[:10]
 #     return HttpResponse(json.dumps(sorted_response), mimetype="application/json")
+
+
+# def state(request):
+#     with open(os.path.abspath(os.path.join(os.path.dirname(__file__), 'static/fipsstates.txt')), 'r') as fips:
+#         for line in fips:
+#             print line
+#             fips_line = line.split(',')
+#             # print fips_line[0] + " "  +fips_line[3]
+#             state = State(name=fips_line[1],fips=fips_line[0],abbr=fips_line[2])
+#             state.save()
+
+#     return render_to_response('index.html', {},context_instance=RequestContext(request))
+
+

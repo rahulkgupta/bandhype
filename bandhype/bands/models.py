@@ -16,7 +16,8 @@ class BandCount(models.Model):
     talk_pct = models.FloatField(null=True)
 
 class State(models.Model):
-    name = models.CharField(max_length=4)
+    name = models.CharField(max_length=200)
+    abbr = models.CharField(max_length=4)
     fips = models.CharField(max_length=4, null=True)
     count = models.IntegerField(null=True)
     pct = models.FloatField(null=True)
