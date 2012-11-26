@@ -10,7 +10,7 @@ from django.template import RequestContext
 from django.conf import settings
 from django.core import serializers
 
-from bands.models import State, County
+from bands.models import State, County, Band
 
 
 
@@ -156,5 +156,7 @@ def fips(request):
 #             state.save()
 
 #     return render_to_response('index.html', {},context_instance=RequestContext(request))
+
+
 
 
