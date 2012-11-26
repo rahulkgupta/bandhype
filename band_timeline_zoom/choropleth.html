@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>Bands by County</title>
+    <link type="text/css" rel="stylesheet" href="choropleth.css"/>
+    <link type="text/css" rel="stylesheet" href="colorbrewer.css"/>
+  </head>
+  <body>
+
+   <!--generateChart calls server for a band name-->
+ <input type="text" id="search" class="search-query" placeholder="Search for a Band"> 
+  <button id="generateChart" class = "btn btn-info">Generate Chart</button>
+    <div id="chart"></div>
+    <div id="timeseries"></div>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="js/d3.v2.js"></script>
+    <script type="text/javascript" src="newchoropleth.js"></script>
+  </body>
+</html>
