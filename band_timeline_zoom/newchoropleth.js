@@ -19,10 +19,6 @@ function generateMap(date){
     var states = svg.append("g")
         .attr("id", "states");
 
-    var legend = svg.append("svg:g")
-      .attr("id", "legend")
-      .attr("class", "Blues");
-
   var tooltip = d3.select("#chart")
     .append("div")
     // .attr("class", "tooltip");
@@ -68,34 +64,6 @@ function generateMap(date){
                   .style("background","#CCFFCC")
                   .style("border-radius","3px")
                   .text(tooltext);
-  };
-  
-
-  // draw a legend
-  function drawLegend(element, qMin, qMax) {
-      // create a new group with the specific base color and add the lower value
-      d3.select(element)
-          .append("g")
-              .attr("id", "legenda").attr("class", appConstants.COLORBASE)
-          .append("text")
-              .attr("x", "20").attr("y", "40").text("Min: " + Math.round(qMin*100)/100);
-   
-      // add the various blocks of the legenda
-      d3.select(element).select("#legenda").selectAll("rect")
-          .data(d3.range(0, 8))
-          .enter()
-          .append("rect")
-              .attr("width", "20").attr("height", "20").attr("y", "0")
-              .attr("class", function (d, i) {
-                  return "q" + i + "-9";
-              })
-              .attr("x", function (d, i) {
-                  return (i + 1) * 20;
-               });
-   
-      // add a text element
-      d3.select(element).select("#legenda").append("text")
-          .attr("x", "140").attr("y", "40").text("Max: " + Math.round(qMax*100)/100)
   };
 
 };
