@@ -23,9 +23,10 @@ def citylistens(request):
                     city__name=arr[1],
                     city__state__fips=arr[2]
                 )
+                count_time = date.fromtimestamp(time.strptime(arr[2],'%a %b %d %H:%M:%S +0000 %Y'))
                 city_band_count = CityCount(
                                 band=city_band, 
-                                time=arr[3], 
+                                time=count_time, 
                                 listen_count=int(arr[4]),
                                 listen_pct=int(arr[5])
                             )
@@ -45,9 +46,10 @@ def citytalks(request):
                     city__name=arr[1],
                     city__state__fips=arr[2]
                 )
+                count_time = date.fromtimestamp(time.strptime(arr[2],'%a %b %d %H:%M:%S +0000 %Y'))
                 city_band_count = CityCount(
                                 band=city_band, 
-                                time=arr[3], 
+                                time=count_time, 
                                 talk_count=int(arr[4]),
                                 talk_pct=int(arr[5])
                             )
@@ -67,9 +69,10 @@ def citycounts(request):
                     city__name=arr[1],
                     city__state__fips=arr[2]
                 )
+                count_time = date.fromtimestamp(time.strptime(arr[2],'%a %b %d %H:%M:%S +0000 %Y'))
                 city_band_count = CityCount(
                                 band=city_band, 
-                                time=arr[3], 
+                                time=count_time, 
                                 listen_count=int(arr[4]),
                                 listen_pct=int(arr[5]),
                                 talk_count=int(arr[6]),

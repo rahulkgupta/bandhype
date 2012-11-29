@@ -19,9 +19,10 @@ def isclistens(request):
             arr = line.split(',')
             try:
                 state_band = StateBand.objects.get(band__name=arr[0], state__fips=arr[1])
+                count_time = date.fromtimestamp(time.strptime(arr[2],'%a %b %d %H:%M:%S +0000 %Y'))
                 state_band_count = StateCount(
                                 band=state_band, 
-                                time=arr[2], 
+                                time=count_time, 
                                 listen_count=int(arr[3]),
                                 listen_pct=int(arr[4])
                             )
@@ -37,9 +38,10 @@ def isctalks(request):
             arr = line.split(',')
             try:
                 state_band = StateBand.objects.get(band__name=arr[0], state__fips=arr[1])
+                count_time = date.fromtimestamp(time.strptime(arr[2],'%a %b %d %H:%M:%S +0000 %Y'))
                 state_band_count = StateCount(
                                 band=state_band, 
-                                time=arr[2], 
+                                time=count_time, 
                                 talk_count=int(arr[3]),
                                 talk_pct=int(arr[4])
                             )
@@ -55,9 +57,10 @@ def isccounts(request):
             arr = line.split(',')
             try:
                 state_band = StateBand.objects.get(band__name=arr[0], state__fips=arr[1])
+                count_time = date.fromtimestamp(time.strptime(arr[2],'%a %b %d %H:%M:%S +0000 %Y'))
                 state_band_count = StateCount(
                                 band=state_band, 
-                                time=arr[2], 
+                                time=count_time, 
                                 listen_count=int(arr[3]),
                                 listen_pct=int(arr[4]),
                                 talk_count=int(arr[5]),

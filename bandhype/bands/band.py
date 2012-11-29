@@ -13,7 +13,7 @@ from django.core import serializers
 from bands.models import Band
 
 def insertbandslistens(request):
-    with open(os.path.abspath(os.path.join(os.path.dirname(__file__), 'static/bandslistens.txt')), 'r') as bands:
+    with open(os.path.abspath(os.path.join(os.path.dirname(__file__), 'static/bandsnov14out500.txt')), 'r') as bands:
         for line in bands:
             arr = line.split(',')
             try:
@@ -23,6 +23,7 @@ def insertbandslistens(request):
             except:
                 band = Band(name=arr[0])
                 band.listen_count = int(arr[1])
+                print band.name + ":" + str(band.listen_count)
                 band.save()
     return HttpResponse("success")
 

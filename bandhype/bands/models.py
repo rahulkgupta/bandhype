@@ -11,7 +11,7 @@ class BandCount(models.Model):
     band = models.ForeignKey(Band)
     time = models.DateField(null=True)
     listen_count = models.IntegerField(null=True)
-    listen_pct = models.FloatField(null=True)
+    listen_pct = models.FloatField(null=True) #
     talk_count = models.IntegerField(null=True)
     talk_pct = models.FloatField(null=True)
 
@@ -37,7 +37,7 @@ class StateCount(models.Model):
     state_band = models.ForeignKey(StateBand)
     time = models.DateField(null=True)
     listen_count = models.IntegerField(null=True)
-    listen_pct = models.FloatField(null=True)
+    listen_pct = models.FloatField(null=True)#
     talk_count = models.IntegerField(null=True)
     talk_pct = models.FloatField(null=True)
 
