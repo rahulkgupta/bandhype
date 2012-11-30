@@ -63,3 +63,4 @@ btcy_f = FOREACH btcy_j GENERATE $3, $0, $1, $2, (float)$4/(float)$8;
 STORE btcy_f INTO 'btcy_f' USING PigStorage(',');
 
 
+
