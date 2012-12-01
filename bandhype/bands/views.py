@@ -10,7 +10,7 @@ from django.template import RequestContext
 from django.conf import settings
 from django.core import serializers
 
-from bands.models import State, County, Band
+# from bands.models import State, County, Band
 
 
 
@@ -38,24 +38,24 @@ def unemployment(request):
     data1 = json.dumps(json_data)
     return HttpResponse(json_data , mimetype="application/json")
 
-def countrypop(request):
-    band_name = request.GET['query']
-    try: 
-        band = Band.objects.get(name=band_name)
-        counties = {}
-        for county in band.counties:
-            counties[county.fips] = county.count
-        return HttpResponse(json.dumps(counties), mimetype="application/json")
-    except:
-        return HttpResponse("nothing")
+# def countrypop(request):
+#     band_name = request.GET['query']
+#     try: 
+#         band = Band.objects.get(name=band_name)
+#         counties = {}
+#         for county in band.counties:
+#             counties[county.fips] = county.count
+#         return HttpResponse(json.dumps(counties), mimetype="application/json")
+#     except:
+#         return HttpResponse("nothing")
 
-#commented out so that the requests don't get accidentally fired
-def fips(request):
-    for county in County.objects.all():
-        if len(county.fips) == 3:
-            county.fips = county.state.fips + county.fips
-            county.save()
-    return render_to_response('index.html', {},context_instance=RequestContext(request))
+# #commented out so that the requests don't get accidentally fired
+# def fips(request):
+#     for county in County.objects.all():
+#         if len(county.fips) == 3:
+#             county.fips = county.state.fips + county.fips
+#             county.save()
+#     return render_to_response('index.html', {},context_instance=RequestContext(request))
 
 # def bcc(request):
 #     with open(os.path.abspath(os.path.join(os.path.dirname(__file__), 'static/banded_county_count.txt')), 'r') as bcc:
