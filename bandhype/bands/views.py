@@ -12,7 +12,7 @@ from django.core import serializers
 
 # from bands.models import State, County, Band
 
-
+from bands.models import Band, BandCity, BandState, BandCounty, TimeCount
 
 def home(request):
     return render_to_response('index.html', {},context_instance=RequestContext(request))
@@ -38,16 +38,11 @@ def unemployment(request):
     data1 = json.dumps(json_data)
     return HttpResponse(json_data , mimetype="application/json")
 
-# def countrypop(request):
-#     band_name = request.GET['query']
-#     try: 
-#         band = Band.objects.get(name=band_name)
-#         counties = {}
-#         for county in band.counties:
-#             counties[county.fips] = county.count
-#         return HttpResponse(json.dumps(counties), mimetype="application/json")
-#     except:
-#         return HttpResponse("nothing")
+def countrypop(request):
+    band_name = request.GET['query']
+    print band_name 
+    band = BandCounty.objects.filter(band=band_name)
+    HttpResponse(json.dumps(band), mimetype="application/json")
 
 # #commented out so that the requests don't get accidentally fired
 # def fips(request):
