@@ -41,8 +41,13 @@ def unemployment(request):
 def countrypop(request):
     band_name = request.GET['query']
     print band_name 
-    band = BandCounty.objects.filter(band=band_name)
-    HttpResponse(json.dumps(band), mimetype="application/json")
+    query = BandCounty.objects.filter(band=band_name)
+    counties = {}
+    for bc in query:
+        counties[bc.county] = {}
+        for time in bc.times:
+            counties[bc.county][time.time] = [time.pct, time.count]
+    return HttpResponse(json.dumps(counties), mimetype="application/json")
 
 # #commented out so that the requests don't get accidentally fired
 # def fips(request):
