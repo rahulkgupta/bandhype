@@ -16,6 +16,7 @@ from bands.models import BandCounty, TimeCount
 
 
 def ctalks(request):
+    bands = {}
     with open(os.path.abspath(os.path.join(os.path.dirname(__file__), 'static/btc_f.txt')), 'r') as read_file:
         for line in read_file:
             arr = line.split(',')
@@ -26,18 +27,25 @@ def ctalks(request):
             pct = float(arr[4])
             time_obj = TimeCount(count=count,pct=pct,time=time)
             try:
-                county_band = BandCounty.objects.get(
-                    band=band,
-                    county=county,
-                )
-                county_band.times.append(time_obj)
-                ## do some time stuff
-                county_band.save()
+                c_b = bands[band + "" + str(county)]
+                c_b.times.append(time_obj)
+                c_b.save()
             except:
-                county_band = BandCounty(
-                    band=band,
-                    county=county,
-                )
-                county_band.times.append(time_obj)
-                county_band.save()  
+                try:
+                    county_band = BandCounty.objects.get(
+                        band=band,
+                        county=county,
+                    )
+                    county_band.times.append(time_obj)
+                    ## do some time stuff
+                    county_band.save()
+                    bands[band + "" + str(county)] = county_band
+                except:
+                    county_band = BandCounty(
+                        band=band,
+                        county=county,
+                    )
+                    county_band.times.append(time_obj)
+                    county_band.save()  
+                    bands[band + "" + str(county)] = county_band
     return HttpResponse("success")

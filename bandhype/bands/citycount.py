@@ -13,6 +13,7 @@ from django.core import serializers
 from bands.models import BandCity, TimeCount
 
 def citytalks(request):
+    bands = {}
     with open(os.path.abspath(os.path.join(os.path.dirname(__file__), 'static/btcy_f.txt')), 'r') as read_file:
         for line in read_file:
             arr = line.split(',')
@@ -24,7 +25,7 @@ def citytalks(request):
             pct = float(arr[5])
             time_obj = TimeCount(count=count,pct=pct,time=time)
             try:
-                city_band = BandCity(
+                city_band = BandCity.objects.get(
                     band=band,
                     city=city,
                     state_fips=state,

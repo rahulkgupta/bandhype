@@ -31,27 +31,36 @@ from bands.models import Band, TimeCount
 #                 return HttpResponse('error')
 #     return HttpResponse("success")
 def btalks(request):
+    bands = {}
     with open(os.path.abspath(os.path.join(os.path.dirname(__file__), 'static/bt_f.txt')), 'r') as read_file:
         for line in read_file:
             arr = line.split(',')
-            band = arr[0]
+            band_name = arr[0]
             time = arr[1]
             count = int(arr[2])
             pct = float(arr[3])
             time_obj = TimeCount(count=count,pct=pct,time=time)
             try:
-                band = Band.objects.get(
-                    band=band,
-                )
+                band = bands[band_name]
                 band.times.append(time_obj)
-                ## do some time stuff
                 band.save()
+                print "found"
             except:
-                band = Band(
-                    band=band,
-                )
-                band.times.append(time_obj)
-                band.save()  
+                try:
+                    band = Band.objects.get(
+                        band=band_name,
+                    )
+                    band.times.append(time_obj)
+                    ## do some time stuff
+                    band.save()
+                    bands[band_name] = band
+                except:
+                    band = Band(
+                        band=band_name,
+                    )
+                    band.times.append(time_obj)
+                    band.save()  
+                    bands[band_name] = band
     return HttpResponse("success")
 
 # def insertbandcountstalks(request):

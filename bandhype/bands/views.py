@@ -1,6 +1,7 @@
 # Create your views here.
 import json
 import os
+import time
 
 import operator
 
@@ -44,10 +45,15 @@ def countrypop(request):
     query = BandCounty.objects.filter(band=band_name)
     counties = {}
     for bc in query:
-        counties[bc.county] = {}
-        for time in bc.times:
-            counties[bc.county][time.time] = [time.pct, time.count]
-    return HttpResponse(json.dumps(counties), mimetype="application/json")
+        county = str(bc.county)
+        if len(county) == 4:
+            print county
+            county = str(0) + county
+        bc_county = counties[county] = []
+        for time_count in bc.times:
+            counties[county].append((time_count.time, time_count.pct, time_count.count))
+        bc_county.sort(key=lambda time_count: time_count[0])
+    return HttpResponse(json.dumps(counties, indent=2), mimetype="application/json")
 
 
 def timeband(request):
@@ -56,10 +62,9 @@ def timeband(request):
     query = Band.objects.get(band=band_name)
     times = []
     for time in query.times:
-        time_dict = {}
-        time_dict[time.time] = [time.count, time.pct]
-        times.append(time_dict)
-    return HttpResponse(json.dumps(counties), mimetype="application/json")
+        times.append((time.time, time.count, time.pct))
+        times.sort(key=lambda time_count: time_count[0])
+    return HttpResponse(json.dumps(times, indent=2), mimetype="application/json")
 # #commented out so that the requests don't get accidentally fired
 # def fips(request):
 #     for county in County.objects.all():

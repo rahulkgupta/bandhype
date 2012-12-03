@@ -8,9 +8,9 @@ function generateMap(date){
 
   var svg = d3.select("#chart")
       .append("svg")
-       .call(d3.behavior.zoom()
+      .call(d3.behavior.zoom()
       .on("zoom", redraw))
-      .append("svg:g");;
+      .append("svg:g");
 
     var counties = svg.append("g")
         .attr("id", "counties")

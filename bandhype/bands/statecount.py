@@ -33,6 +33,7 @@ from bands.models import BandState, TimeCount
 #     return HttpResponse("success")
 
 def stalks(request):
+    bands = {}
     with open(os.path.abspath(os.path.join(os.path.dirname(__file__), 'static/bts_f.txt')), 'r') as read_file:
         for line in read_file:
             arr = line.split(',')
@@ -42,21 +43,29 @@ def stalks(request):
             count = int(arr[3])
             pct = float(arr[4])
             time_obj = TimeCount(count=count,pct=pct,time=time)
+
             try:
-                state_band = BandState.objects.get(
-                    band=band,
-                    state_fips=state_fips,
-                )
-                state_band.times.append(time_obj)
-                ## do some time stuff
-                state_band.save()
+                s_b = bands[band + "" + str(state_fips)]
+                s_b.times.append(time_obj)
+                s_b.save()
             except:
-                state_band = BandState(
-                    band=band,
-                    state_fips=state_fips,
-                )
-                state_band.times.append(time_obj)
-                state_band.save()  
+                try:
+                    state_band = BandState.objects.get(
+                        band=band,
+                        state_fips=state_fips,
+                    )
+                    state_band.times.append(time_obj)
+                    ## do some time stuff
+                    state_band.save()
+                    bands[band + "" + str(state_fips)] = state_band
+                except:
+                    state_band = BandState(
+                        band=band,
+                        state_fips=state_fips,
+                    )
+                    state_band.times.append(time_obj)
+                    state_band.save()
+                    bands[band + " " + str(state_fips)] = state_band
     return HttpResponse("success")
 
 # def isccounts(request):
