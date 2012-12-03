@@ -43,7 +43,7 @@ def stalks(request):
             pct = float(arr[4])
             time_obj = TimeCount(count=count,pct=pct,time=time)
             try:
-                state_band = BandState(
+                state_band = BandState.objects.get(
                     band=band,
                     state_fips=state_fips,
                 )

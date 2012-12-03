@@ -49,6 +49,17 @@ def countrypop(request):
             counties[bc.county][time.time] = [time.pct, time.count]
     return HttpResponse(json.dumps(counties), mimetype="application/json")
 
+
+def timeband(request):
+    band_name = request.GET['query']
+    print band_name 
+    query = Band.objects.get(band=band_name)
+    times = []
+    for time in query.times:
+        time_dict = {}
+        time_dict[time.time] = [time.count, time.pct]
+        times.append(time_dict)
+    return HttpResponse(json.dumps(counties), mimetype="application/json")
 # #commented out so that the requests don't get accidentally fired
 # def fips(request):
 #     for county in County.objects.all():

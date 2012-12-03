@@ -20,6 +20,8 @@ urlpatterns = patterns('',
     url(r'^getfips$', 'bands.views.getfips'),
     url(r'^state$', 'bands.views.state'),
 
+    url(r'^timeband$', 'bands.views.timeband'),
+    url(r'^btalks$', 'bands.bandcount.btalks'),
     url(r'^stalks$', 'bands.statecount.stalks'),
     url(r'^ctalks$', 'bands.countycount.ctalks'),
     url(r'citytalks$', 'bands.citycount.citytalks'),

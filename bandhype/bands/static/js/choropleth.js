@@ -3,7 +3,10 @@ var data; // loaded asynchronously
 var path = d3.geo.path();
 
 var svg = d3.select("#chart")
-    .append("svg");
+    .append("svg")
+    .call(d3.behavior.zoom()
+    .on("zoom", redraw))
+    .append("svg:g");
 
 var counties = svg.append("g")
     .attr("id", "counties")
@@ -38,22 +41,52 @@ d3.json("states", function(json) {
         .enter().append("path")
         .attr("d", path);
 });
+var currday = "2012-11-14"
 $('#search-btn').on('click', function(e){
     band = $("#search").val()
     d3.json("countrypop?query=" + band, function(json) {
+        data = json
         console.log(json)
-        // counties.selectAll("path")
-        // .attr("class", quantize);
-  });
+        counties.selectAll("path")
+        .attr("class", quantize)
+    });
 })
 
+function redraw() {
+    svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+}
+
+$('#change-btn').on('click', function(e){
+    currday = "2012-11-15"
+    counties.selectAll("path")
+    .attr("class", quantize);
+});
+
+
 function quantize(d) {
-    return "q" + Math.min(9, ~~(data[d.id] * 2)) + "-9";
+    var days = data[d.id]
+    if (days)
+        if (days[currday]) {
+            console.log(days[currday]);
+            return "q" + Math.min(9, ~~(days[currday][0] * 8)) + "-9";    
+        }
+            
+    return 'q0-9'
 }
 
 // Function when user clicks county in the map
 function mapover(d){
-    var tooltext = "County: "+d.properties.name+", No. of Tweets: "+ data[d.id]
+    var days = data[d.id]
+    var tooltext = ""
+    if (days) {
+        if (days[currday]) {
+            console.log(days[currday]);
+            tooltext = "County: "+d.properties.name+", Pct. of Tweets: "+ days[currday][0] *100 + "%"
+        }
+    } else {
+        tooltext = "County: "+d.properties.name+", Pct. of Tweets: 0%"
+    }
+    
     return tooltip.style("visibility", "visible")
         .style("color","#990000")
         .style("background","#CCFFCC")

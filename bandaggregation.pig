@@ -33,7 +33,7 @@ bcity_pct = JOIN bcity_count by ($0, $1), city_count by ($0, $1);
 bcity_final = FOREACH bcity_pct GENERATE $2, $0, $1, $3, (float)$3/(float)$6;
 
 STORE bcity_final INTO 'novbcitycount' USING PigStorage(',');
-*/
+
 bts = GROUP tweets BY (band, state, time);
 ts = GROUP tweets BY (state, time);
 bts_c = FOREACH bts GENERATE FLATTEN($0), COUNT($1) as count;
@@ -62,6 +62,14 @@ btcy_j = JOIN btcy_c by ($1, $2, $3), ts_c by ($0, $1, $2);
 btcy_f = FOREACH btcy_j GENERATE $0, $1, $2, $3, $4, (float)$4/(float)$8;
 
 STORE btcy_f INTO 'btcy_f' USING PigStorage(',');
+*/
 
+bt = GROUP tweets BY (time, band);
+time = GROUP tweets BY time;
+bt_c = FOREACH bt GENERATE FLATTEN($0), COUNT($1) as count;
+time_c = FOREACH time GENERATE $0, COUNT($1) as count;
+bt_j = JOIN bt_c by $0, time_c by $0;
+bt_f = FOREACH bt_j GENERATE $1, $0, $2, (float)$2/(float)$4;
 
+STORE bt_f INTO 'bt_f' USING PigStorage(',');
 
