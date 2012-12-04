@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+body {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.js"></script>
+<script>
+
+var margin = {top: 20, right: 80, bottom: 30, left: 50},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+var parseDate = d3.time.format("%Y%m%d").parse;
+
+var x = d3.time.scale()
+    .range([0, width]);
+
+// var x = d3.scale.ordinal()
+//     .range([height, 0]);
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+
+var color = d3.scale.ordinal()
+    .range(["#6b486b", "#d0743c" ])
+    .domain(["Listening", "Talking" ]);
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left");
+
+var line = d3.svg.line()
+    .interpolate("basis")
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.tweets); });
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var tooltip = d3.select("body")
+      .append("div")
+      .style("position", "absolute")
+      .style("z-index", "10")
+      .style("visibility", "hidden")
+
+d3.json("timeline.json", function(error,json) {
+        searchband = "B1";
+        error = true;
+         var banddata;
+
+          for (band in json){
+          if (band === searchband){
+            banddata = json[band];
+            error = false;
+          }
+         } 
+
+         if (error==true){
+          alert("No data for "+searchband);
+          return;
+         }
+
+   var data =[];
+      for (day in banddata){
+        d={};
+        d["date"] = day
+        d["Listening"] = banddata[day][0].toString();
+        d["Talking"] = banddata[day][1].toString();
+        data.push(d);
+      }
+
+  data.forEach(function(d) {
+    d.date = parseDate(d.date);
+  });
+
+  var bands = color.domain().map(function(name) {
+    return {
+      name: name,
+      values: data.map(function(d) {
+        return {date: d.date, tweets: +d[name]};
+      })
+    };
+  });
+
+ x.domain(data.map(function(d) { return d.date; }));
+  y.domain([
+    d3.min(bands, function(c) { return d3.min(c.values, function(v) { return v.tweets; }); }),
+    d3.max(bands, function(c) { return d3.max(c.values, function(v) { return v.tweets; }); })
+  ]);
+
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+    .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Tweets");
+
+  var band = svg.selectAll(".band")
+      .data(bands)
+    .enter().append("g")
+      .attr("class", "band");
+
+  band.append("path")
+      .attr("class", "line")
+      .attr("d", function(d) { return line(d.values); })
+      .style("stroke", function(d) { return color(d.name); })
+       .on("mouseover", function(d){gettime(d)})
+      .on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
+      .on("mouseout", function(){return tooltip.style("visibility", "hidden");})
+      .attr("height", function(d) { return height - y(d.tweets); });
+
+  band.append("text")
+      .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
+      .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.tweets) + ")"; })
+      .attr("x", 3)
+      .attr("dy", ".35em")
+      .text(function(d) { return d.name; });
+
+  function gettime(d){
+
+          var tooltext = d.name;
+          tooltip.style("visibility", "visible")
+                  .style("color","#990000")
+                  // .style("background","#990000")
+                  .style("border-radius","3px")
+                  .text(tooltext);
+
+        };
+});
+
+</script>
