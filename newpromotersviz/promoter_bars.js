@@ -79,112 +79,112 @@ $('#generateChart').on('click', function (e) {
           };
 
 
-            var layers = [arr1, arr2];
+        var layers = [arr1, arr2];
 
-            var n = 2 // no. of bands compared
-            var  yGroupMax = d3.max(layers, function (layer) {
-                    return d3.max(layer, function (d) {
-                        return d.y;
-                    });
-                }),
-                yStackMax = d3.max(layers, function (layer) {
-                    return d3.max(layer, function (d) {
-                        return d.y0 + d.y;
-                    });
+        var n = 2 // no. of bands compared
+        var  yGroupMax = d3.max(layers, function (layer) {
+                return d3.max(layer, function (d) {
+                    return d.y;
                 });
-
-
-            x.domain(Object.keys(compareBands));
-            y.domain([0, yStackMax]);
-            ys.domain([0, yStackMax]);
-            yg.domain([0, yGroupMax]);
-
-
-            var tooltip = d3.select("#chart")
-                .append("div")
-            // .attr("class", "tooltip");
-            .style("position", "absolute")
-                .style("z-index", "10")
-                .style("visibility", "hidden")
-
-            var layer = svg.selectAll(".layer")
-                .data(layers)
-                .enter().append("g")
-                .attr("class", "layer")
-                .style("fill", function (d, i) {
-                return color(i);
-            });
-
-            var rect = layer.selectAll("rect")
-                .data(function (d) {
-                return d;
-            })
-                .enter().append("rect")
-                .attr("x", function (d) {
-                return x(d.x);
-            })
-                .attr("y", height)
-                .attr("width", 20)
-                .attr("height", 0)
-                .on("mouseover", function (d) {
-                onhover(d)
-            })
-                .on("mousemove", function () {
-                return tooltip.style("top", (event.pageY - 10) + "px").style("left", (event.pageX + 10) + "px");
-            })
-                .on("mouseout", function () {
-                return tooltip.style("visibility", "hidden");
-            });
-
-            rect.transition()
-                .delay(function (d, i) {
-                return i * 10;
-            })
-                .attr("y", function (d) {
-                return y(d.y0 + d.y);
-            })
-                .attr("height", function (d) {
-                return y(d.y0) - y(d.y0 + d.y);
+            }),
+            yStackMax = d3.max(layers, function (layer) {
+                return d3.max(layer, function (d) {
+                    return d.y0 + d.y;
+                });
             });
 
 
-            svg.append("g")
-                .attr("class", "x axis")
-                .attr("transform", "translate(0," + height + ")")
-                .call(xAxis);
+        x.domain(Object.keys(compareBands));
+        y.domain([0, yStackMax]);
+        ys.domain([0, yStackMax]);
+        yg.domain([0, yGroupMax]);
 
-            svg.append("g")
-                .attr("class", "y axis")
-                .call(yAxis)
-                .append("text")
-                .attr("transform", "rotate(-90)")
-                .attr("y", 6)
-                .attr("dy", ".71em")
-                .style("text-anchor", "end")
-                .text("Tweets");
 
-            var legend = svg.selectAll(".legend")
-                .data(bandTypes)
-                .enter().append("g")
-                .attr("class", "legend")
-                .attr("transform", function (d, i) {
-                return "translate(0," + i * 20 + ")";
-            });
+        var tooltip = d3.select("#chart")
+            .append("div")
+        // .attr("class", "tooltip");
+        .style("position", "absolute")
+            .style("z-index", "10")
+            .style("visibility", "hidden")
 
-            legend.append("rect")
-                .attr("x", width - 18)
-                .attr("width", 18)
-                .attr("height", 18)
-                .style("fill", legendcolor);
+        var layer = svg.selectAll(".layer")
+            .data(layers)
+            .enter().append("g")
+            .attr("class", "layer")
+            .style("fill", function (d, i) {
+            return color(i);
+        });
 
-            legend.append("text")
-                .attr("x", width - 24)
-                .attr("y", 9)
-                .attr("dy", ".35em")
-                .style("text-anchor", "end")
-                .text(function (d) {
-                return d;
-            });
+        var rect = layer.selectAll("rect")
+            .data(function (d) {
+            return d;
+        })
+            .enter().append("rect")
+            .attr("x", function (d) {
+            return x(d.x);
+        })
+            .attr("y", height)
+            .attr("width", 20)
+            .attr("height", 0)
+            .on("mouseover", function (d) {
+            onhover(d)
+        })
+            .on("mousemove", function () {
+            return tooltip.style("top", (event.pageY - 10) + "px").style("left", (event.pageX + 10) + "px");
+        })
+            .on("mouseout", function () {
+            return tooltip.style("visibility", "hidden");
+        });
+
+        rect.transition()
+            .delay(function (d, i) {
+            return i * 10;
+        })
+            .attr("y", function (d) {
+            return y(d.y0 + d.y);
+        })
+            .attr("height", function (d) {
+            return y(d.y0) - y(d.y0 + d.y);
+        });
+
+
+        svg.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(xAxis);
+
+        svg.append("g")
+            .attr("class", "y axis")
+            .call(yAxis)
+            .append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 6)
+            .attr("dy", ".71em")
+            .style("text-anchor", "end")
+            .text("Tweets");
+
+        var legend = svg.selectAll(".legend")
+            .data(bandTypes)
+            .enter().append("g")
+            .attr("class", "legend")
+            .attr("transform", function (d, i) {
+            return "translate(0," + i * 20 + ")";
+        });
+
+        legend.append("rect")
+            .attr("x", width - 18)
+            .attr("width", 18)
+            .attr("height", 18)
+            .style("fill", legendcolor);
+
+        legend.append("text")
+            .attr("x", width - 24)
+            .attr("y", 9)
+            .attr("dy", ".35em")
+            .style("text-anchor", "end")
+            .text(function (d) {
+            return d;
+        });
 
 
             function onhover(d) {
@@ -272,15 +272,15 @@ $('#generateChart').on('click', function (e) {
   });
 
 function reset_chart(){
-  $('#chart').empty();
-  $('#timeseries1').empty();
+    $('#chart').empty();
+    $('#timeseries1').empty();
     $('#timeseries2').empty();
 
 };
 
 function reset_time(){
-  $('#timeseries1').empty();
-   $('#timeseries2').empty();
+    $('#timeseries1').empty();
+    $('#timeseries2').empty();
 };
 //Time Line for Band1
 function generateTime1(bandname1){

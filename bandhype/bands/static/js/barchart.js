@@ -6,7 +6,7 @@ var margin = {top: 20, right: 20, bottom: 30, left: 40},
 // var formatPercent = d3.format(".0%");
 
 var x = d3.scale.ordinal()
-    .rangeRoundBands([0, width], .1);
+    .rangeRoundBands([0, width], .2);
 
 var y = d3.scale.linear()
     .range([height, 0]);
@@ -20,6 +20,55 @@ var yAxis = d3.svg.axis()
     .orient("left")
     // .tickFormat(formatPercent);
 
+var path = d3.geo.path();
+
+var m = [40, 40, 40, 40],
+    w = 960 - m[1] - m[3],
+    h = 240 - m[0] - m[2],
+    parse = d3.time.format("%Y-%m-%d").parse;
+
+var tx = d3.time.scale().range([0, w]),
+    ty = d3.scale.linear().range([h, 0]),
+    txAxis = d3.svg.axis().scale(tx).tickSize(-h).tickSubdivide(true),
+    tyAxis = d3.svg.axis().scale(ty).ticks(4).orient("right");
+
+var tarea = d3.svg.area()
+    .interpolate("monotone")
+    .x(function(d) { return tx(d.date); })
+    .y0(h)
+    .y1(function(d) { return ty(d.count); });
+
+var tline = d3.svg.line()
+    .interpolate("monotone")
+    .x(function(d) { return tx(d.date); })
+    .y(function(d) { return ty(d.count); });
+
+var tsvg = d3.select("#time-series")
+            .append("svg:svg")
+            .attr("width", w + m[1] + m[3])
+            .attr("height", h + m[0] + m[2])
+            .append("svg:g")
+            .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
+
+var tareapath = tsvg.append("svg:path")
+        .attr("class", "area")
+
+var txaxispath = tsvg.append("svg:g")
+            .attr("class", "tx axis")
+
+
+var tyaxispath = tsvg.append("svg:g")
+            .attr("class", "ty axis")
+
+var tlinepath = tsvg.append("svg:path")
+            .attr("class", "line")
+            .attr("clip-path", "url(#clip)")
+
+
+var ttextanchor = tsvg.append("svg:text")
+                .attr("x", w - 6)
+                .attr("y", h - 6)
+                .attr("text-anchor", "end")
 
 $('#promoter').on('click', function(e){
 
@@ -43,8 +92,9 @@ $('#promoter').on('click', function(e){
             for (var i = 0; i < json.length ; i++) {
                 console.log(json[i])
                 var banddetails ={};
-                banddetails["bandname"] = json[i][0]
-                banddetails["tweets"] = parseInt(json[i][1])
+                banddetails["bandname"] = json[i].band
+                banddetails["tweets"] = json[i].count
+                banddetails["times"] = json[i].times
                 data.push(banddetails);
             }
 
@@ -74,7 +124,56 @@ $('#promoter').on('click', function(e){
                 .attr("x", function(d) { return x(d.bandname); })
                 .attr("width", x.rangeBand())
                 .attr("y", function(d) { return y(d.tweets); })
-                .attr("height", function(d) { return height - y(d.tweets); });
+                .attr("height", function(d) { return height - y(d.tweets); })
+                .on('mouseover',function(d) {gettime(d, this)})
+                .on('mouseout',  function(d) {d3.select(this).attr('class', 'bar')})
 
     });
 });
+function gettime(d, self) {
+    times = d.times
+    d3.select(self).attr('class', 'bar highlight')
+    times.forEach(function(d) {
+            d.date = parse(d[0])
+            d.count = d[2]
+            d.pct = d[1]
+        })
+    console.log(times)
+
+    tx.domain([times[0].date, times[times.length - 1].date]);
+    ty.domain([0, d3.max(times, function(d) { return d.count; })]).nice();
+        
+
+    tsvg.append("svg:clipPath")
+        .attr("id", "clip")
+        .append("svg:rect")
+        .attr("width", w)
+        .attr("height", h);
+
+    tareapath.attr("d", tarea(times));
+
+    txaxispath.attr("transform", "translate(0," + h + ")")
+        .call(txAxis);
+
+  // Add the y-axis.
+    tyaxispath.attr("transform", "translate(" + w + ",0)")
+        .call(tyAxis);
+
+  // Add the line path.
+        
+    tlinepath.attr("d", tline(times));
+
+  // Add a small label for the symbol name.
+    ttextanchor.text("Talks");
+        
+
+    tsvg.selectAll(".dot").remove('circle')
+    tsvg.selectAll(".dot")
+        .data(times)
+        .enter().append("circle")
+        .attr("class", "dot")
+        .attr("r", 3.5)
+        .attr("cx", function(d) { console.log(d); return tx(d.date); })
+        .attr("cy", function(d) { return ty(d.count); })
+
+}

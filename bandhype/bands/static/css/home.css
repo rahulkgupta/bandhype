@@ -50,6 +50,11 @@ path.area {
   stroke: #000;
 }
 
+.dot {
+  fill : red;
+  stroke: black;
+  stroke-width:2px;
+}
 /*
  * This product includes color specifications and designs developed by Cynthia
  * Brewer (http://colorbrewer.org/).

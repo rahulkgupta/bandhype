@@ -2,7 +2,6 @@ var data; // loaded asynchronously
 
 var path = d3.geo.path();
 
-
 var m = [40, 40, 40, 40],
     w = 960 - m[1] - m[3],
     h = 240 - m[0] - m[2],
@@ -55,7 +54,7 @@ var textanchor = tsvg.append("svg:text")
 var svg = d3.select("#chart")
     .append("svg")
     .call(d3.behavior.zoom()
-    .on("zoom", redraw))
+        .on("zoom", redraw))
     .append("svg:g");
 
 
@@ -146,10 +145,11 @@ $('#search-btn').on('click', function(e){
             .data(json)
             .enter().append("circle")
             .attr("class", "dot")
-            .attr("r", 3.5)
+            .attr("r", 4)
             .attr("cx", function(d) { console.log(d); return x(d.date); })
             .attr("cy", function(d) { return y(d.count); })
-            .on("mouseover", function(d){changetime(d)})
+            .on("mouseover", function(d){changetime(d, this)})
+            .on("mouseout", function(d){d3.select(this).attr('r', 4)})
                 // .style("fill", function(d) { return color(d.species); });
     })
 })
@@ -201,7 +201,8 @@ function mapover(d){
         .text(tooltext);
 };
 
-function changetime(d) {
+function changetime(d, self) {
+    d3.select(self).attr('r', 8)
     cd = d[0]
     counties.selectAll("path")
     .attr("class", quantize);

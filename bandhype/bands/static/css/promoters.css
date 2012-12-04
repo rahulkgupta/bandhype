@@ -3,3 +3,36 @@
     margin-top: 3px;
     margin-right: 15px;
 }
+
+.highlight
+{
+    stroke: black;
+    stroke-width:3px;
+}
+
+path.line {
+  fill: none;
+  stroke: #666;
+  stroke-width: 1.5px;
+}
+
+path.area {
+  fill: #e7e7e7;
+}
+
+.tx.axis line {
+  stroke: #fff;
+}
+
+.tx.axis .minor {
+  stroke-opacity: .5;
+}
+
+.tx.axis path {
+  display: none;
+}
+
+.ty.axis line, .y.axis path {
+  fill: none;
+  stroke: #000;
+}
