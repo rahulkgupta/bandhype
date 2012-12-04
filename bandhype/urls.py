@@ -19,10 +19,12 @@ urlpatterns = patterns('',
     url(r'^topstate$', 'bands.views.topstate'),
     url(r'^getfips$', 'bands.views.getfips'),
     url(r'^state$', 'bands.views.state'),
+    url(r'^getcity$', 'bands.views.getcity'),
 
     url(r'^timeband$', 'bands.views.timeband'),
     url(r'^btalks$', 'bands.bandcount.btalks'),
     url(r'^stalks$', 'bands.statecount.stalks'),
     url(r'^ctalks$', 'bands.countycount.ctalks'),
     url(r'citytalks$', 'bands.citycount.citytalks'),
+    url(r'cityagg$', 'bands.citycount.cityagg')
 )

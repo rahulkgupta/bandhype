@@ -57,14 +57,43 @@ def countrypop(request):
 
 
 def timeband(request):
-    band_name = request.GET['query']
-    print band_name 
+    band_name = request.GET['query'].lower()
     query = Band.objects.get(band=band_name)
     times = []
     for time in query.times:
         times.append((time.time, time.count, time.pct))
         times.sort(key=lambda time_count: time_count[0])
     return HttpResponse(json.dumps(times, indent=2), mimetype="application/json")
+
+
+def getcity(request):
+    city_name = request.GET['city'].lower()
+    states = {"AL": 1,"AK": 2, "AZ": 4,"AR": 5,"CA": 6,
+            "CO":8,"CT":9,"DC": 10, "DE":11,"FL":12,"GA":13,"HI":15,"ID":16,
+            "IL":17,"IN":18,"IA":19,"KS":20,"KY":21,"LA":22,"ME":23,"MD":24,
+            "MA":25,"MI":26,"MN":27,"MS":28,"MO":29,"MT":30,"NE":31,"NV":32,
+            "NH":33,"NJ":34,"NM":35,"NY":36,"NC":37,
+            "ND":38,"OH":39,"OK":40,"OR":41,"PA":42,"RI":44,
+            "SC":45,"SD":46,"TN":47,"TX":48,"UT":49,"VT":50,
+            "VA":51,"WA":53,"WV":54,"WI":55,"WY":56}
+    state_fips = states[request.GET['state'].upper()]
+    query = BandCity.objects.filter(
+            city = city_name,
+            state_fips = state_fips
+        ).order_by('-count')[:10]
+    bands = []
+    for bc in query:
+        band = {}
+        bands.append(band)
+        band["band"] = bc.band
+        band["pct"] = bc.pct
+        band["count"] = bc.count
+        times = band["times"] = []
+        for time_count in bc.times:
+            times.append((time_count.time, time_count.pct, time_count.count))
+        times.sort(key=lambda time_count: time_count[0])
+    return HttpResponse(json.dumps(bands, indent=2), mimetype="application/json")
+
 # #commented out so that the requests don't get accidentally fired
 # def fips(request):
 #     for county in County.objects.all():

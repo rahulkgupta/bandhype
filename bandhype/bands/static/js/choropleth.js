@@ -62,7 +62,7 @@ var svg = d3.select("#chart")
 
 var counties = svg.append("g")
     .attr("id", "counties")
-    .attr("class", "Greens");
+    .attr("class", "Purples");
 
 var states = svg.append("g")
     .attr("id", "states");
@@ -173,7 +173,7 @@ function quantize(d) {
             console.log(i)
             console.log(days)
             if (days[i][0] == cd) {
-                return "q" + Math.min(9, ~~(days[i][2]*1.5)) + "-9"; 
+                return "q" + Math.min(9, ~~(days[i][2]*2)) + "-9"; 
             }   
         }
     }

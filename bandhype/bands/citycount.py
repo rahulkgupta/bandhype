@@ -42,3 +42,15 @@ def citytalks(request):
                 city_band.times.append(time_obj)
                 city_band.save()  
     return HttpResponse("success")
+
+def cityagg(request):
+    bandcities = BandCity.objects.all()
+    for bc in bandcities:
+        bc.pct = 0
+        bc.count = 0
+        for time in bc.times:
+            bc.count += time.count
+            bc.pct += time.pct
+        bc.pct = bc.pct/len(bc.times)
+        bc.save()
+    return HttpResponse("success")
