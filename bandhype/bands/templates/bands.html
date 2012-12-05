@@ -105,7 +105,12 @@
       </div>
 
 
-      <input type="text" id="search" class="search-query" placeholder="Search for a Band"> 
+      <input type="text" id="search" class="search-query" placeholder="Search for a Band"
+        data-provide="typeahead"
+        data-source="{{bands}}"
+
+
+      /> 
       <button id="search-btn" class = "btn btn-info">Generate Map</button>
       <div id="chart"></div>
       <div id="time-series"></div>

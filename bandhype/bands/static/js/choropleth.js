@@ -215,7 +215,7 @@ function changetime(d, self) {
     cd = d[0]
     counties.selectAll("path")
     .attr("class", quantize);
-    tooltext = "Tweet Percentage: " + d[2] + "%"
+    tooltext = "Tweet Percentage: " + Number(d[2].toFixed(2)) + "%"
     return ttooltip.style("visibility", "visible")
         .style("color","#990000")
         .style("background","#CCFFCC")

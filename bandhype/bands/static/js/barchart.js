@@ -198,14 +198,14 @@ function gettime(d, self) {
         .style("color","#990000")
         .style("background","#CCFFCC")
         .style("border-radius","3px")
-        .text("Pct. of Tweets: " + d.pct + "%")
+        .text("Tweet Percentage: " + Number(d.pct.toFixed(2)) + "%")
         
 }
 
 function showtime(d, self) {
     d3.select(self).attr('r', 8)
     cd = d[0]
-    tooltext = "Tweet Percentage: " + d[2] + "%"
+    tooltext = "Tweet Percentage: " + Number(d[2].toFixed(2)) + "%"
     return tooltip.style("visibility", "visible")
         .style("color","#990000")
         .style("background","#CCFFCC")
