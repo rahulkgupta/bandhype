@@ -26,11 +26,10 @@ var m = [40, 40, 40, 40],
     w = 960 - m[1] - m[3],
     h = 240 - m[0] - m[2],
     parse = d3.time.format("%Y-%m-%d").parse;
-
-var tx = d3.time.scale().range([0, w]),
+var tx = d3.time.scale().range([0, w])
     ty = d3.scale.linear().range([h, 0]),
-    txAxis = d3.svg.axis().scale(tx).tickSize(-h).tickSubdivide(true),
-    tyAxis = d3.svg.axis().scale(ty).ticks(4).orient("right");
+    txAxis = d3.svg.axis().scale(tx).tickSize(-h).tickSubdivide(true).tickFormat(d3.time.format("%m/%e")),
+    tyAxis = d3.svg.axis().scale(ty).ticks(6).orient("right");
 
 var tarea = d3.svg.area()
     .interpolate("monotone")

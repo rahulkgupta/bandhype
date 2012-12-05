@@ -9,7 +9,7 @@ var m = [40, 40, 40, 40],
 
 var x = d3.time.scale().range([0, w]),
     y = d3.scale.linear().range([h, 0]),
-    xAxis = d3.svg.axis().scale(x).tickSize(-h).tickSubdivide(true),
+    xAxis = d3.svg.axis().scale(x).tickSize(-h).tickSubdivide(true).tickFormat(d3.time.format("%m/%e")),
     yAxis = d3.svg.axis().scale(y).ticks(4).orient("right");
 
 var area = d3.svg.area()
@@ -28,7 +28,7 @@ var tsvg = d3.select("#time-series")
             .attr("width", w + m[1] + m[3])
             .attr("height", h + m[0] + m[2])
             .append("svg:g")
-            .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
+            .attr("transform", "translate(" + 20 + "," + m[0] + ")");
 
 var areapath = tsvg.append("svg:path")
         .attr("class", "area")
@@ -170,10 +170,8 @@ function quantize(d) {
     var days = data[d.id]
     if (days) {
         for (var i = 0; i < days.length; i++) {
-            console.log(i)
-            console.log(days)
             if (days[i][0] == cd) {
-                return "q" + Math.min(9, ~~(days[i][2]*2)) + "-9"; 
+                return "q" + Math.min(9, ~~(days[i][1]*10)) + "-9"; 
             }   
         }
     }
@@ -185,9 +183,9 @@ function mapover(d){
     var days = data[d.id]
     var tooltext = ""
     if (days) {
-        if (days[currday]) {
-            if (days[currday][0] == cd) {
-                tooltext = "County: "+d.properties.name+", Pct. of Tweets: "+ days[currday][1] *100 + "%"
+        for (var i = 0; i < days.length; i++) {
+            if (days[i][0] == cd) {
+                tooltext = "County: "+d.properties.name+", Tweet Count: "+ days[i][2]
             }   
         }
     } else {
