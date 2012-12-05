@@ -32,6 +32,12 @@ path.area {
   display: none;
 }
 
+.dot {
+  fill : red;
+  stroke: black;
+  stroke-width:2px;
+}
+
 .ty.axis line, .y.axis path {
   fill: none;
   stroke: #000;

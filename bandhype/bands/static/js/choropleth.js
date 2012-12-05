@@ -30,6 +30,13 @@ var tsvg = d3.select("#time-series")
             .append("svg:g")
             .attr("transform", "translate(" + 20 + "," + m[0] + ")");
 
+var ttooltip = d3.select("body")
+    .append("div")
+    .attr("id", "ttooltip")
+    .style("position", "absolute")
+    .style("z-index", "10")
+    .style("visibility", "hidden")
+
 var areapath = tsvg.append("svg:path")
         .attr("class", "area")
 
@@ -149,7 +156,11 @@ $('#search-btn').on('click', function(e){
             .attr("cx", function(d) { console.log(d); return x(d.date); })
             .attr("cy", function(d) { return y(d.count); })
             .on("mouseover", function(d){changetime(d, this)})
-            .on("mouseout", function(d){d3.select(this).attr('r', 4)})
+            .on("mousemove", function(){return ttooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})   
+            .on("mouseout", function(d){
+                    ttooltip.style("visibility", "hidden")
+                    d3.select(this).attr('r', 4)
+                })
                 // .style("fill", function(d) { return color(d.species); });
     })
 })
@@ -204,4 +215,10 @@ function changetime(d, self) {
     cd = d[0]
     counties.selectAll("path")
     .attr("class", quantize);
+    tooltext = "Tweet Percentage: " + d[2] + "%"
+    return ttooltip.style("visibility", "visible")
+        .style("color","#990000")
+        .style("background","#CCFFCC")
+        .style("border-radius","3px")
+        .text(tooltext);
 }

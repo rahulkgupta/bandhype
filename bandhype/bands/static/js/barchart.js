@@ -20,6 +20,12 @@ var yAxis = d3.svg.axis()
     .orient("left")
     // .tickFormat(formatPercent);
 
+var tooltip = d3.select("body")
+    .append("div")
+    .style("position", "absolute")
+    .style("z-index", "10")
+    .style("visibility", "hidden")
+
 var path = d3.geo.path();
 
 var m = [40, 40, 40, 40],
@@ -92,14 +98,15 @@ $('#promoter').on('click', function(e){
                 console.log(json[i])
                 var banddetails ={};
                 banddetails["bandname"] = json[i].band
-                banddetails["tweets"] = json[i].count
+                banddetails["count"] = json[i].count
+                banddetails['pct'] = json[i].pct
                 banddetails["times"] = json[i].times
                 data.push(banddetails);
             }
 
         console.log(data)
         x.domain(data.map(function(d) { return d.bandname; }));
-        y.domain([0, d3.max(data, function(d) { return d.tweets; })]);
+        y.domain([0, d3.max(data, function(d) { return d.count; })]);
 
         svg.append("g")
             .attr("class", "x axis")
@@ -122,10 +129,14 @@ $('#promoter').on('click', function(e){
                 .attr("class", "bar")
                 .attr("x", function(d) { return x(d.bandname); })
                 .attr("width", x.rangeBand())
-                .attr("y", function(d) { return y(d.tweets); })
-                .attr("height", function(d) { return height - y(d.tweets); })
+                .attr("y", function(d) { return y(d.count); })
+                .attr("height", function(d) { return height - y(d.count); })
                 .on('mouseover',function(d) {gettime(d, this)})
-                .on('mouseout',  function(d) {d3.select(this).attr('class', 'bar')})
+                .on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
+                .on('mouseout',  function(d) {
+                        d3.select(this).attr('class', 'bar')
+                        return tooltip.style("visibility", "hidden");
+                    })
 
     });
 });
@@ -137,17 +148,20 @@ function gettime(d, self) {
             d.count = d[2]
             d.pct = d[1]
         })
-    console.log(times)
 
     tx.domain([times[0].date, times[times.length - 1].date]);
     ty.domain([0, d3.max(times, function(d) { return d.count; })]).nice();
-        
+    
+    
 
     tsvg.append("svg:clipPath")
         .attr("id", "clip")
         .append("svg:rect")
         .attr("width", w)
         .attr("height", h);
+
+
+    
 
     tareapath.attr("d", tarea(times));
 
@@ -174,5 +188,27 @@ function gettime(d, self) {
         .attr("r", 3.5)
         .attr("cx", function(d) { console.log(d); return tx(d.date); })
         .attr("cy", function(d) { return ty(d.count); })
+        .on("mouseover", function(d){showtime(d, this)})
+        .on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})   
+        .on("mouseout", function(d){
+                    tooltip.style("visibility", "hidden")
+                    d3.select(this).attr('r', 4)
+                })
+    return tooltip.style("visibility", "visible")
+        .style("color","#990000")
+        .style("background","#CCFFCC")
+        .style("border-radius","3px")
+        .text("Pct. of Tweets: " + d.pct + "%")
+        
+}
 
+function showtime(d, self) {
+    d3.select(self).attr('r', 8)
+    cd = d[0]
+    tooltext = "Tweet Percentage: " + d[2] + "%"
+    return tooltip.style("visibility", "visible")
+        .style("color","#990000")
+        .style("background","#CCFFCC")
+        .style("border-radius","3px")
+        .text(tooltext);
 }
