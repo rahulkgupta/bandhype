@@ -20,7 +20,7 @@ class BandState(models.Model):
 class BandCity(models.Model):
     band = models.CharField(max_length=200)
     city = models.CharField(max_length=200)
-    state_fips = models.IntegerField()
+    state_fips = models.CharField(max_length=200)
     state_abbr = models.CharField(max_length=200, null=True)
     count = models.IntegerField(null=True)
     pct = models.FloatField(null=True)
@@ -28,7 +28,7 @@ class BandCity(models.Model):
 
 class BandCounty(models.Model):
     band = models.CharField(max_length=200)
-    county = models.IntegerField(null=True)
+    county = models.CharField(max_length=200)
     count = models.IntegerField(null=True)
     pct = models.FloatField(null=True)
     times = ListField(EmbeddedModelField('TimeCount'))
