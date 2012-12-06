@@ -211,7 +211,7 @@ function gettime(d, self) {
 function showtime(d, self) {
     d3.select(self).attr('r', 8)
     cd = d[0]
-    tooltext = "Tweet Percentage: " + Number((d[2]*100).toFixed(2)) + "%"
+    tooltext = "Tweet Percentage: " + Number((d[1]*100).toFixed(2)) + "%"
     return tooltip.style("visibility", "visible")
         .text(tooltext);
 }

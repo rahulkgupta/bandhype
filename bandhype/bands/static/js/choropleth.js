@@ -193,7 +193,7 @@ function mapover(d, self){
         .style('stroke', "#000")
         .style('stroke-width', "2px")
     var days = data[d.id]
-    var tooltext = ""
+    var tooltext = "County: "+d.properties.name+", Tweet Count: 0; Tweet Pct: 0%"
     if (days) {
         for (var i = 0; i < days.length; i++) {
             if (days[i][0] == cd) {
@@ -201,8 +201,6 @@ function mapover(d, self){
                         "; Tweet Pct: " + Number((days[i][1]*100).toFixed(2)) + "%"
             }   
         }
-    } else {
-        tooltext = "County: "+d.properties.name+", Tweet Count: 0"
     }
     tooltip.text(tooltext)
         .style("visibility", "visible");
