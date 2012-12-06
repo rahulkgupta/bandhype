@@ -10,7 +10,7 @@ var m = [40, 40, 40, 40],
 var x = d3.time.scale().range([0, w]),
     y = d3.scale.linear().range([h, 0]),
     xAxis = d3.svg.axis().scale(x).tickSize(-h).tickSubdivide(true).tickFormat(d3.time.format("%m/%e")),
-    yAxis = d3.svg.axis().scale(y).ticks(4).orient("right");
+    yAxis = d3.svg.axis().scale(y).ticks(4).orient("left");
 
 var area = d3.svg.area()
     .interpolate("monotone")
@@ -28,7 +28,7 @@ var tsvg = d3.select("#time-series")
             .attr("width", w + m[1] + m[3])
             .attr("height", h + m[0] + m[2])
             .append("svg:g")
-            .attr("transform", "translate(" + 20 + "," + m[0] + ")");
+            .attr("transform", "translate(" + (m[1] + 10) + "," + m[0] + ")");
 
 var ttooltip = d3.select("body")
     .append("div")
@@ -75,6 +75,7 @@ var states = svg.append("g")
 
 var tooltip = d3.select("body")
     .append("div")
+    .attr("id", "tooltip")
     .style("position", "absolute")
     .style("z-index", "10")
     .style("visibility", "hidden")
@@ -135,7 +136,7 @@ $('#search-btn').on('click', function(e){
             .call(xAxis);
 
   // Add the y-axis.
-       yaxispath.attr("transform", "translate(" + w + ",0)")
+       yaxispath
             .call(yAxis);
 
   // Add the line path.
@@ -200,14 +201,11 @@ function mapover(d){
             }   
         }
     } else {
-        tooltext = "County: "+d.properties.name+", Pct. of Tweets: 0%"
+        tooltext = "County: "+d.properties.name+", Tweet Count: 0"
     }
-    
-    return tooltip.style("visibility", "visible")
-        .style("color","#990000")
-        .style("background","#CCFFCC")
-        .style("border-radius","3px")
-        .text(tooltext);
+    console.log(tooltext)
+    tooltip.text(tooltext)
+        .style("visibility", "visible");
 };
 
 function changetime(d, self) {
@@ -217,8 +215,5 @@ function changetime(d, self) {
     .attr("class", quantize);
     tooltext = "Tweet Percentage: " + Number(d[2].toFixed(2)) + "%"
     return ttooltip.style("visibility", "visible")
-        .style("color","#990000")
-        .style("background","#CCFFCC")
-        .style("border-radius","3px")
         .text(tooltext);
 }

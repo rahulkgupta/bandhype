@@ -51,6 +51,24 @@ path.area {
   stroke: #000;
 }
 
+#tooltip {
+  background: black;
+  color: white;
+  opacity: 0.8;
+  border-radius: 4px;
+  padding: 4px;
+}
+
+
+
+#ttooltip {
+  background: black;
+  color: white;
+  opacity: 0.8;
+  border-radius: 4px;
+  padding: 4px;
+}
+
 .dot {
   fill : red;
   stroke: black;

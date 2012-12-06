@@ -22,6 +22,7 @@ var yAxis = d3.svg.axis()
 
 var tooltip = d3.select("body")
     .append("div")
+    .attr("id", "tooltip")
     .style("position", "absolute")
     .style("z-index", "10")
     .style("visibility", "hidden")
@@ -35,7 +36,7 @@ var m = [40, 40, 40, 40],
 var tx = d3.time.scale().range([0, w])
     ty = d3.scale.linear().range([h, 0]),
     txAxis = d3.svg.axis().scale(tx).tickSize(-h).tickSubdivide(true).tickFormat(d3.time.format("%m/%e")),
-    tyAxis = d3.svg.axis().scale(ty).ticks(6).orient("right");
+    tyAxis = d3.svg.axis().scale(ty).ticks(6).orient("left");
 
 var tarea = d3.svg.area()
     .interpolate("monotone")
@@ -84,7 +85,7 @@ $('#promoter').on('click', function(e){
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        .attr("transform", "translate(" + (margin.left + 15) + "," + margin.top + ")");
 
 
     var json;
@@ -169,7 +170,7 @@ function gettime(d, self) {
         .call(txAxis);
 
   // Add the y-axis.
-    tyaxispath.attr("transform", "translate(" + w + ",0)")
+    tyaxispath
         .call(tyAxis);
 
   // Add the line path.
@@ -195,9 +196,6 @@ function gettime(d, self) {
                     d3.select(this).attr('r', 4)
                 })
     return tooltip.style("visibility", "visible")
-        .style("color","#990000")
-        .style("background","#CCFFCC")
-        .style("border-radius","3px")
         .text("Tweet Percentage: " + Number(d.pct.toFixed(2)) + "%")
         
 }
@@ -207,8 +205,5 @@ function showtime(d, self) {
     cd = d[0]
     tooltext = "Tweet Percentage: " + Number(d[2].toFixed(2)) + "%"
     return tooltip.style("visibility", "visible")
-        .style("color","#990000")
-        .style("background","#CCFFCC")
-        .style("border-radius","3px")
         .text(tooltext);
 }

@@ -10,6 +10,20 @@
     stroke-width:3px;
 }
 
+#tooltip {
+  background: black;
+  color: white;
+  opacity: 0.8;
+  border-radius: 4px;
+  padding: 4px;
+}
+
+#chart
+{
+  width: 960px;
+  height: 500px;
+}
+
 path.line {
   fill: none;
   stroke: #666;
