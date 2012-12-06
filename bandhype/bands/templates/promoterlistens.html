@@ -9,8 +9,7 @@
 
     <!-- Le styles -->
     <link href="{{STATIC_URL}}css/bootstrap.css" rel="stylesheet">
-    <link href="{{STATIC_URL}}css/home.css" rel="stylesheet">
-    <script type="text/javascript" src="{{STATIC_URL}}js/d3.v2.min.js"></script>
+    <link href="{{STATIC_URL}}css/promoters.css" rel="stylesheet">
     <style type="text/css">
       body {
         padding-top: 20px;
@@ -44,6 +43,20 @@
         padding: 14px 24px;
       }
 
+      .axis path,
+      .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+      }
+
+      .bar {
+        fill: steelblue;
+      }
+
+      .x.axis path {
+        display: none;
+      }
       /* Supporting marketing content */
       .marketing {
         margin: 60px 0;
@@ -95,30 +108,31 @@
     <div class="container">
 
       <div class="masthead">
-         <ul class="nav nav-pills pull-right">
+
+        <ul class="nav nav-pills pull-right">
           <li><a href="/">Home</a></li>
-          <li><a href="/promoters">Promoters</a></li>
-          <li class="active"><a href="/bands">Bands</a></li>
-        </ul>   
+          <li class="active"><a href="">Promoters</a></li>
+          <li><a href="/bands">Bands</a></li>
+        </ul>
+        
         <h3 class="muted">BandHype</h3>
         <hr>
       </div>
       <ul class="nav nav-tabs">
-        <li class="active">
-          <a href="#">Talks</a>
+        <li>
+          <a href="/promoters">Talks</a>
         </li>
-        <li><a href="/bandlistens">Listens</a></li>
+        <li class="active"><a href="#">Listens</a></li>
       </ul>
 
-      <input type="text" id="search" class="search-query" placeholder="Search for a Band"
-        data-provide="typeahead"
-        data-source="{{bands}}"/> 
-      <button id="search-btn" class = "btn btn-info">Generate Map</button>
-      <h2>Geographic Distribution</h2>
+      
+      <input type="text" id="search" class="search-query" placeholder="Search for a City"> 
+      <button id="promoter" class = "btn btn-info">Generate Chart</button>
+
+      <h2>Top Bands</h2>
       <div id="chart"></div>
       <h2>Time Series</h2>
       <div id="time-series"></div>
-
       <!-- Example row of columns -->
       <hr>
 
@@ -132,8 +146,6 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="{{STATIC_URL}}js/jquery.js"></script>
-
-    <script type="text/javascript" src="{{STATIC_URL}}js/choropleth.js"></script>
     <script src="{{STATIC_URL}}js/bootstrap-transition.js"></script>
     <script src="{{STATIC_URL}}js/bootstrap-alert.js"></script>
     <script src="{{STATIC_URL}}js/bootstrap-modal.js"></script>
@@ -146,6 +158,8 @@
     <script src="{{STATIC_URL}}js/bootstrap-collapse.js"></script>
     <script src="{{STATIC_URL}}js/bootstrap-carousel.js"></script>
     <script src="{{STATIC_URL}}js/bootstrap-typeahead.js"></script>
-
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="{{STATIC_URL}}js/d3.v2.min.js"></script>
+    <script type="text/javascript" src="{{STATIC_URL}}js/barchartlistens.js"></script>
   </body>
 </html>

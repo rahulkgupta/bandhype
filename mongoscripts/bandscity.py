@@ -1,12 +1,12 @@
 import pymongo
 import os
 from pymongo import MongoClient
-
+import re
 
 connection = MongoClient('ds033337.mongolab.com', 33337)
 db = connection['heroku_app8819589']
 db.authenticate('admin', 'twitter')
-bands_band = db['bands_bandcity']
+bands_band = db['bands_listencity']
 bands = {}
 states = {"AL": "01","AK": "02", "AZ": "04","AR": "05","CA": "06",
     "CO":"08","CT":"09","DC": "10", "DE":"11","FL":"12","GA":"13","HI":"15","ID":"16",
@@ -16,15 +16,23 @@ states = {"AL": "01","AK": "02", "AZ": "04","AR": "05","CA": "06",
     "ND":"38","OH":"39","OK":"40","OR":"41","PA":"42","RI":"44",
     "SC":"45","SD":"46","TN":"47","TX":"48","UT":"49","VT":"50",
     "VA":"51","WA":"53","WV":"54","WI":"55","WY":"56"}
+print "ello"
 with open(os.path.abspath(os.path.join(os.path.dirname(__file__), 'btcy_f.txt')), 'r') as read_file:
         for line in read_file:
             arr = line.split(',')
-            band_name = arr[0]
-            city = arr[1].lower()
-            state_fips = arr[2]
-            time = arr[3]
-            count = int(arr[4])
-            pct = float(arr[5])
+            band_name = ""
+            pos = 0
+            for piece in arr:
+                if re.match("$[a-z].*$", piece):
+                    band_name = band_name + piece
+                    print band_name
+                    pos = pos + 1
+            print band_name
+            city = arr[pos + 1].lower()
+            state_fips = arr[pos + 2]
+            time = arr[pos + 3]
+            count = int(arr[pos + 4])
+            pct = float(arr[pos + 5])
             state_abbr = ""
             for abbr, fips in states.iteritems():
                 if state_fips == fips:

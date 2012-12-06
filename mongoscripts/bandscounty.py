@@ -6,7 +6,7 @@ from pymongo import MongoClient
 connection = MongoClient('ds033337.mongolab.com', 33337)
 db = connection['heroku_app8819589']
 db.authenticate('admin', 'twitter')
-bands_band = db['bands_bandcounty']
+bands_band = db['bands_listencounty']
 bands = {}
 with open(os.path.abspath(os.path.join(os.path.dirname(__file__), 'btc_f.txt')), 'r') as read_file:
         for line in read_file:

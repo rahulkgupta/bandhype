@@ -1,20 +1,30 @@
 import pymongo
 import os
 from pymongo import MongoClient
-
+import re
 
 connection = MongoClient('ds033337.mongolab.com', 33337)
 db = connection['heroku_app8819589']
 db.authenticate('admin', 'twitter')
-bands_band = db['bands_band']
+bands_band = db['bands_listen']
 bands = {}
 with open(os.path.abspath(os.path.join(os.path.dirname(__file__), 'bt_f.txt')), 'r') as read_file:
         for line in read_file:
             arr = line.split(',')
-            band_name = arr[0]
-            time = arr[1]
-            count = int(arr[2])
-            pct = float(arr[3])
+            band_name = ""
+            time = ""
+            count = 0
+            pct = 0
+            pos = 0
+            for piece in arr:
+                if re.match("$[a-z].*$", piece):
+                    band_name = band_name + piece
+                    pos = pos + 1
+            time = arr[pos]
+            count = int(pos + 1)
+            pct = float(pos + 2)
+
+
             time_obj = {"count":count,"pct":pct,"time":time}
             try:
                 band = bands[band_name]

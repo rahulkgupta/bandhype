@@ -116,9 +116,10 @@ def unemployment(request):
 def countrypop(request):
     band_name = request.GET['query']
     print band_name 
-    query = BandCounty.objects.filter(band=band_name)
+    bandcounties = BandCounty.objects.filter(band=band_name)
+    band = Band.objects.get(band=band_name)
     counties = {}
-    for bc in query:
+    for bc in bandcounties:
         county = str(bc.county)
         if len(county) == 4:
             print county
@@ -167,6 +168,89 @@ def getcity(request):
             times.append((time_count.time, time_count.pct, time_count.count))
         times.sort(key=lambda time_count: time_count[0])
     return HttpResponse(json.dumps(bands, indent=2), mimetype="application/json")
+
+
+def promoterlistens(request):
+    return render_to_response('promoterlistens.html', {},context_instance=RequestContext(request))
+
+
+def bandlistens(request):
+    band_json = ["chvrches", "katy perry", "the raconteurs", "maroon 5", "hoobastank", 
+    "zz top", "taylor swift", "judas priest", "goldfinger", "lindsey stirling", "sonic youth", 
+    "gogol bordello", "kraddy", "phantom planet", "hatebreed", "wolfmother", "powerman 5000", 
+    "george winston", "white stripes", "jason mraz", "junior senior", "james blunt", 
+    "bob marley", "tangerine dream", "flyleaf", "sister sledge", "skism", "gordon lightfoot", 
+    "nicki minaj", "the fray", "chris brown", "white zombie", "sum 41", "mr c", "keyshia cole", 
+    "flaming lips", "blink 182", "sugarcult", "the fratellis", "new boyz", "kenny chesney", 
+    "the lumineers", "deadmau5", "haddaway", "avicii", "rascal flatts", "jon pardi", 
+    "lil wayne", "willie nelson", "eminem", "beck", "greg bates", "cherub", "leighton meester", 
+    "buffalo springfield", "nadia ali", "miracle drug", "glee cast", "rusko", "indigo girls", 
+    "eve 6", "gorillaz", "jefferson airplane", "krewella", "justin timberlake", "pantera", 
+    "iron maiden", "christina perri", "casey james", "the remote", "zedd", "rob dougan", 
+    "odetta", "citizen king", "pit bull", "coldplay", "prince royce", "bon jovi", "trace adkins","afrojack", "ratatat", "van halen", "sufjan stevens", "beastie boys", "m83", "muse", "berlin","train", "bloodhound gang", "gary allan", "miranda lambert", "calvin harris", "gwen stefani","godsmack", "grimes", "rolling stones", "generation x", "alex clare", "knife party", "stroke","morning parade", "chevelle", "bonnie tyler", "public enemy", "santana", "hollywood undead","tim mcgraw", "blaqk audio", "hugo", "snow patrol", "sneaker pimps", "drowning pool","duran duran", "lostprophets", "lacuna coil", "ed sheehan", "eric church", "freestylers","the killers", "daddy yankee", "django django", "cascada", "darius rucker", "pistol annies","tal bachman", "staind", "willow", "jeffree star", "beyonce", "major lazer", "stone sour","nelly furtado", "shania twain", "elliott smith", "smash mouth", "buckcherry", "mgmt", 
+    "blackmill", "eric clapton", "lynyrd skynyrd", "deftones", "clutch", "dido", "chris cagle", 
+    "matchbox twenty", "blind melon", "thompson square", "the cardigans", "marilyn manson", 
+    "ozzy osborne", "randy houser", "amo ellas", "barenaked ladies", "don omar", "neon trees", 
+    "jay z", "dire straits", "evanescence", "vertical horizon", "garvey", "jessie j", 
+    "aqualung", "spice girls", "jeff buckley", "rem", "paul mccartney", "leo kottke", 
+    "white town", "led zeppelin", "king crimson", "oasis", "bear mccreary", "ben folds", 
+    "kristen kelly", "ok go", "metallica", "collective soul", "tomahawk", "estelle", 
+    "bad brains", "disturbed", "the hives", "smashing pumpkins", "david archuleta", 
+    "bon iver", "the smiths", "the beatles", "linkin park", "bjork", "grateful dead", 
+    "james brown", "madeon", "imagine dragons", "miles davis", "genesis", "adventure club", 
+    "kt tunstall", "postal service", "ellie goulding", "tool", "nirvana", "the cataracs", 
+    "lcd soundsystem", "king missile", "clannad", "the skatalites", "frou fro", 
+    "howlin wolf", "martin solveig", "pretty lights", "steve earle", "one direction", 
+    "orgy", "muddy waters", "adam lambert", "trey anastasio", "candlebox", "velvet revolver", 
+    "dan black", "peter gabriel", "brantley gilbert", "kacey musgraves", "adele", 
+    "little dragon", "modest mouse", "luke bryan", "franz ferdinand", "sick puppies", 
+    "foreigner", "the buggles", "the bled", "missy elliott", "the weeknd", "la roux", 
+    "stabbing westward", "limp bizket", "everlast", "daughtry", "ac dc", "rancid", 
+    "slipknot", "kip moore", "janis joplin", "good charlotte", "david guetta", 
+    "reba mcentire", "queen", "eurythmics", "mutemath", "danny elfman", "volbeat", 
+    "tenacious d", "enrique iglesias", "gotye", "alexander acha", "borgore", "rihanna", 
+    "bush", "chopin", "fuel", "don mclean", "the byrds", "violent femmes", "leann rimes", 
+    "oakenfold", "juicy j", "james taylor", "avenged sevenfold", "justin moore", 
+    "citizen cope", "george strait", "porter robinson", "romeo santos", "the clash", 
+    "dillon", "carlos vives", "bruce springsteen", "phil collins", "alanis morissette", 
+    "sheryl crow", "soundgarden", "emmylou harris", "celtic woman", "bridget mendler", 
+    "apollo 440", "the script", "toby keith", "motley crue", "neil young", "halestorm", 
+    "brassica", "porcelain black", "apocolyptica", "foo fighters", "pearl jam", 
+    "marcy playground", "lady sovereign", "black sabbath", "priestess", "kelly rowland", 
+    "sublime", "no doubt", "harry chaplin", "lady antebellum", "placebo", "melanie fiona", 
+    "the prodigy", "audioslave", "christina aguilera", "alicia keys", "alice cooper", 
+    "the pretenders", "oingo boingo", "michael jackson", "gin blossoms", "imogen heap", 
+    "jimi hendrix", "atrey", "china man", "lee brice", "asher roth", "the darkness", 
+    "devotchka", "sevendust", "alexandra stan", "billy joel", "timbaland", "moody blues", 
+    "frank zappa", "savage garden", "nickelback", "massive attack", "benny benassi", 
+    "the bravery", "onerepublic", "the wanted", "jack white", "die antwood", "styx", 
+    "soil", "sting", "kelly clarkson", "butthole surfers", "the who", "madonna", 
+    "flogging molly", "rob thomas", "tony bennett", "jawbreaker", "tim mcmorris", 
+    "semisonic", "rob zombie", "ween", "blake shelton", "everclear", "carrie underwood", 
+    "cassadee pope", "lou bega", "stateless", "jake owens", "moby", "pitbull", 
+    "alejandro sanz", "bassnecter", "lightning bolt", "peeping tom", "ciara", 
+    "blue foundation", "parov stelar", "bob dylan", "50 cent", "portishead", 
+    "sugar ray", "breaking benjamin", "darude", "eric prydz", "steely dan", 
+    "adema", "def leppard", "beach boys", "newcleus", "lovage", "jethro tull", 
+    "laura gibson", "the cure", "crystal castles", "depeche mode", "creed", 
+    "lena", "crazy town", "usher", "incubus", "zero 7", "radiohead", "shakira", 
+    "lifehouse", "bruno mars", "amanda brown", "the used", "chainz", "dustin lynch", 
+    "joy division", "hinder", "lmfao", "papa roach", "skrillex", "akon", "aerosmith", 
+    "eiffel 65", "silversun pickups", "owl city", "flux pavilion", "fleetwood mac", 
+    "ben howard", "the dreaming", "disclosure", "garbage", "trust company", 
+    "britney spears", "eighteen visions", "thomas newman", "tracy chapman", 
+    "cobra starship", "pink floyd", "jason derulo", "tantric", "don davis", 
+    "green day", "jason aldean", "kylie minogue", "nashville cast", "madilyn bailey", 
+    "cher lloyd", "melanie martinez", "gnarls barkley", "symphony x", "awolnation", 
+    "seether", "pinkly smooth", "easton corbin", "rudimental", "hunter hayes", "fiona apple", 
+    "counting crows", "purity ring", "chromeo", "sbtrkt", "the vines", "sex pistols", 
+    "ghost town", "cake", "jose feliciano", "daft punk", "kid rock", "lady gaga", "monsta", 
+    "nero", "teenage days", "bingo players", "shinedown", "french montana", "justin bieber", 
+    "korn", "david bowie", "george gershwin", "otto knows", "enya", "jennifer lopez", 
+    "mike posner", "bag raiders", "icona pop", "the offspring", "rita ora", "thomas rhett", 
+    "the misfits"]
+    return render_to_response('bandlistens.html', {"bands": json.dumps(band_json)},context_instance=RequestContext(request))
+
 
 # #commented out so that the requests don't get accidentally fired
 # def fips(request):
