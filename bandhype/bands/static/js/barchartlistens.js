@@ -93,7 +93,7 @@ $('#promoter').on('click', function(e){
     var json;
     error = true;
     var promoterlocation = $('#search').val().split(',');
-    d3.json("getcity?city=" + promoterlocation[0] + "&state=" + promoterlocation[1].replace(/\s+/g, ''), function(json) {
+    d3.json("listencity?city=" + promoterlocation[0] + "&state=" + promoterlocation[1].replace(/\s+/g, ''), function(json) {
         console.log(json)
 
         var data =[];

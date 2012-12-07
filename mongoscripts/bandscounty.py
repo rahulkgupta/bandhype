@@ -10,23 +10,26 @@ bands_band = db['bands_listencounty']
 bands = {}
 with open(os.path.abspath(os.path.join(os.path.dirname(__file__), 'btc_f.txt')), 'r') as read_file:
         for line in read_file:
-            arr = line.split(',')
-            band_name = arr[0]
-            county = arr[1]
-            time = arr[2]
-            count = int(arr[3])
-            pct = float(arr[4])
-            time_obj = {"count":count,"pct":pct,"time":time}
             try:
-                band = bands[band_name + "" + str(county)]
-                band["times"].append(time_obj)
-                print "found"
+                arr = line.split(';')
+                band_name = arr[0]
+                county = arr[1]
+                time = arr[2]
+                count = int(arr[3])
+                pct = float(arr[4])
+                time_obj = {"count":count,"pct":pct,"time":time}
+                try:
+                    band = bands[band_name + "" + str(county)]
+                    band["times"].append(time_obj)
+                    print "found"
+                except:
+                    bands[band_name + "" + str(county)] = {
+                        "band": band_name,
+                        "county": county,
+                        "times" : [time_obj]
+                    }
             except:
-                bands[band_name + "" + str(county)] = {
-                    "band": band_name,
-                    "county": county,
-                    "times" : [time_obj]
-                }
+                print "not happening"
 
 for band_name in bands:
     band = bands[band_name]

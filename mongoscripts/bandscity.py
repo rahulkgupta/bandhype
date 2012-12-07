@@ -19,37 +19,34 @@ states = {"AL": "01","AK": "02", "AZ": "04","AR": "05","CA": "06",
 print "ello"
 with open(os.path.abspath(os.path.join(os.path.dirname(__file__), 'btcy_f.txt')), 'r') as read_file:
         for line in read_file:
-            arr = line.split(',')
-            band_name = ""
-            pos = 0
-            for piece in arr:
-                if re.match("$[a-z].*$", piece):
-                    band_name = band_name + piece
-                    print band_name
-                    pos = pos + 1
-            print band_name
-            city = arr[pos + 1].lower()
-            state_fips = arr[pos + 2]
-            time = arr[pos + 3]
-            count = int(arr[pos + 4])
-            pct = float(arr[pos + 5])
-            state_abbr = ""
-            for abbr, fips in states.iteritems():
-                if state_fips == fips:
-                    state_abbr = abbr
-            time_obj = {"count":count,"pct":pct,"time":time}
             try:
-                band = bands[band_name + city + state_fips]
-                band["times"].append(time_obj)
-                print "found"
+                arr = line.split(';')
+                band_name = arr[0]
+                pos = 0
+                city = arr[1].lower()
+                state_fips = arr[2]
+                time = arr[3]
+                count = int(arr[4])
+                pct = float(arr[5])
+                state_abbr = ""
+                for abbr, fips in states.iteritems():
+                    if state_fips == fips:
+                        state_abbr = abbr
+                time_obj = {"count":count,"pct":pct,"time":time}
+                try:
+                    band = bands[band_name + city + state_fips]
+                    band["times"].append(time_obj)
+                    print "found"
+                except:
+                    bands[band_name + city + state_fips] = {
+                        "band": band_name,
+                        "city": city,
+                        "state_fips": state_fips,
+                        "state_abbr": state_abbr,
+                        "times" : [time_obj]
+                    }
             except:
-                bands[band_name + city + state_fips] = {
-                    "band": band_name,
-                    "city": city,
-                    "state_fips": state_fips,
-                    "state_abbr": state_abbr,
-                    "times" : [time_obj]
-                }
+                print "didnt work"
 
 
 for band_name in bands:

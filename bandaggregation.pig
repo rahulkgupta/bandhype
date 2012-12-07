@@ -1,6 +1,6 @@
 register 'udfs.py' using jython as udfs;
 
-tweet_original = LOAD 'listenBandList_20k.txt' USING PigStorage('\t') AS (band, user, longitude, latitude, time, text, city, county, state, fips);
+tweet_original = LOAD 'fipsListen.txt' USING PigStorage('\t') AS (band, user, longitude, latitude, time, text, city, county, state, fips);
 tweets = FOREACH tweet_original GENERATE band, udfs.get_day(time) as time, city, fips as county, SUBSTRING((chararray)fips,0,2) as state;
 
 

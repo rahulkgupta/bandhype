@@ -108,14 +108,14 @@ var cd
 
 $('#search-btn').on('click', function(e){
     band = $("#search").val()
-    d3.json("countrypop?query=" + band, function(json) {
+    d3.json("countrylisten?query=" + band, function(json) {
         currday = 0
         data = json
         counties.selectAll("path")
         .attr("class", cd ? quantize : null)
     });
 
-    d3.json("timeband?query=" + band, function (json) {
+    d3.json("timelisten?query=" + band, function (json) {
         json.forEach(function(d) {
             d.date = parse(d[0])
             d.count = d[1]

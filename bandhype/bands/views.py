@@ -117,7 +117,6 @@ def countrypop(request):
     band_name = request.GET['query']
     print band_name 
     bandcounties = BandCounty.objects.filter(band=band_name)
-    band = Band.objects.get(band=band_name)
     counties = {}
     for bc in bandcounties:
         county = str(bc.county)
@@ -144,7 +143,6 @@ def countrylisten(request):
     band_name = request.GET['query']
     print band_name 
     bandcounties = ListenCounty.objects.filter(band=band_name)
-    band = Band.objects.get(band=band_name)
     counties = {}
     for bc in bandcounties:
         county = str(bc.county)
@@ -165,7 +163,7 @@ def timelisten(request):
     for time in query.times:
         times.append((time.time, time.count, time.pct))
         times.sort(key=lambda time_count: time_count[0])
-    return HttpResponse(json.dumps(times, indent=2), mimetype)
+    return HttpResponse(json.dumps(times, indent=2), mimetype="application/json")
 
 def getcity(request):
     city_name = request.GET['city'].lower()
