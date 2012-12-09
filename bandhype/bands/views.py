@@ -130,27 +130,37 @@ def countrypop(request):
     return HttpResponse(json.dumps(counties, indent=2), mimetype="application/json")
 
 def countrycounties(request):
-    band_name = request.GET['query']
+    band_name = request.GET['band']
+    state = request.GET['state']
     print band_name 
-    bandcounties = BandCounty.objects.filter(band=band_name)
-    counties = {}
-    for bc in bandcounties:
-        county = str(bc.county)
-        if len(county) == 4:
-            print county
-            county = str(0) + county
-        bc_county = counties[county] = []
-        for time_count in bc.times:
-            counties[county].append((time_count.time, time_count.pct, time_count.count))
-        bc_county.sort(key=lambda time_count: time_count[0])
-    return HttpResponse(json.dumps(counties, indent=2), mimetype="application/json")
+    bandcounties = BandCounty.objects.filter(band=band_name, county__startswith=state)
+    bandstate = BandState.objects.get(band=band_name, state_fips=state)
+    times = []
+    for time in bandstate.times:
+        counties = {}
+        times.append((time.time, time.count, time.pct, counties))
+        for bc in bandcounties:
+            for county_time in bc.times:
+                if county_time.time == time.time:
+                    counties[bc.county] = (county_time.time, county_time.pct, county_time.count)
+        times.sort(key=lambda time_count: time_count[0])
+    return HttpResponse(json.dumps(times, indent=2), mimetype="application/json")
 
 def timeband(request):
     band_name = request.GET['query'].lower()
     query = Band.objects.get(band=band_name)
+    bandcounties = BandCounty.objects.filter(band=band_name)
+    bandstates = BandState.objects.filter(band=band_name)
     times = []
     for time in query.times:
-        times.append((time.time, time.count, time.pct))
+        counties = {}
+        states = {}
+        times.append((time.time, time.count, time.pct, counties, states))
+        for bc in bandstates:
+            for state_time in bc.times:
+                if state_time.time == time.time:
+                    states[bc.state_fips] = (state_time.time, state_time.pct, state_time.count)
+
         times.sort(key=lambda time_count: time_count[0])
     return HttpResponse(json.dumps(times, indent=2), mimetype="application/json")
 

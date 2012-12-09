@@ -17,7 +17,7 @@ class Listen(models.Model):
 
 class BandState(models.Model):
     band = models.CharField(max_length=200)
-    state_fips = models.IntegerField()
+    state_fips = models.CharField(max_length=4)
     state_abbr = models.CharField(max_length=200, null=True)
     count = models.IntegerField(null=True)
     pct = models.FloatField(null=True)
@@ -25,7 +25,7 @@ class BandState(models.Model):
     
 class ListenState(models.Model):
     band = models.CharField(max_length=200)
-    state_fips = models.IntegerField()
+    state_fips = models.CharField(max_length=4)
     state_abbr = models.CharField(max_length=200, null=True)
     count = models.IntegerField(null=True)
     pct = models.FloatField(null=True)
