@@ -116,6 +116,22 @@ def unemployment(request):
 def countrypop(request):
     band_name = request.GET['query']
     print band_name 
+    bandcounties = BandState.objects.filter(band=band_name)
+    counties = {}
+    for bc in bandcounties:
+        county = str(bc.state_fips)
+        if len(county) == 4:
+            print county
+            county = str(0) + county
+        bc_county = counties[county] = []
+        for time_count in bc.times:
+            counties[county].append((time_count.time, time_count.pct, time_count.count))
+        bc_county.sort(key=lambda time_count: time_count[0])
+    return HttpResponse(json.dumps(counties, indent=2), mimetype="application/json")
+
+def countrycounties(request):
+    band_name = request.GET['query']
+    print band_name 
     bandcounties = BandCounty.objects.filter(band=band_name)
     counties = {}
     for bc in bandcounties:
@@ -128,7 +144,6 @@ def countrypop(request):
             counties[county].append((time_count.time, time_count.pct, time_count.count))
         bc_county.sort(key=lambda time_count: time_count[0])
     return HttpResponse(json.dumps(counties, indent=2), mimetype="application/json")
-
 
 def timeband(request):
     band_name = request.GET['query'].lower()

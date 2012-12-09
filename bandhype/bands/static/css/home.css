@@ -10,9 +10,11 @@ svg {
 }
 
 #counties path {
-  stroke: #fff;
+  stroke: #77f;
   stroke-width: .25px;
 }
+
+
 
 path.line {
   fill: none;
@@ -25,8 +27,7 @@ path.area {
 }
 
 #states path {
-  fill: none;
-  stroke: #fff;
+  stroke: #77f;
   stroke-width: 1.5px;
 }
 
