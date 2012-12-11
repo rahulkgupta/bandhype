@@ -56,12 +56,12 @@ var textanchor = tsvg.append("svg:text")
 
 function changetime(d, self) {
     d3.select(self).attr('r', 8)
-    state_data = d.states
-    county_data = d.counties
     if (!zoomed) {
+        state_data = d.states
         states.selectAll("path")
             .attr("class", quantize);
-    } else {
+    } else {        
+        county_data = d.counties
         counties.selectAll("path")
             .attr("class", cquantize);
     }

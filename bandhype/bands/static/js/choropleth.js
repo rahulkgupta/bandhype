@@ -5,6 +5,8 @@ var counties_paths;
 var path = d3.geo.path();
 var zoomed = false;
 
+var disp = true;
+
 var svg = d3.select("#chart")
     .append("svg")
     // .call(d3.behavior.zoom()
@@ -56,8 +58,8 @@ d3.json("states", function(json) {
         .attr("d", path)
         .on("mouseout", function(){
             d3.select(this)
-                .style('stroke', "#fff")
-                .style('stroke-width', '.25px')
+                .style('stroke', "#77f")
+                .style('stroke-width', '1.5px')
             return tooltip.style("visibility", "hidden");})
         .attr("d", path);
 
@@ -128,12 +130,18 @@ function quantize(d) {
     if (state) {
         var total = 0
         var count = 0
+        var pct = 0.0
         for (var s in state_data) {
             count += 1
             total += state_data[s][2]
+            pct += state_data[s][1]
         }
-        console.log("q" + Math.min(8, ~~(state[2]/total * count*4)) + "-9")
-        return "q" + Math.min(8, ~~(state[2]/total * count*4)) + "-9"; 
+        if (disp)
+            return "q" + Math.min(8, ~~(state[2]/total * count*4)) + "-9";
+        else {
+            return "q" + Math.min(8, ~~(state[1]/pct * count*4)) + "-9";
+        }
+            
     }
     return 'q0-9'
 }
@@ -143,12 +151,17 @@ function cquantize(d) {
     if (county) {
         var total = 0
         var count = 0
+        var pct = 0.0
         for (var s in county_data) {
             count += 1
             total += county_data[s][2]
+            pct += county_data[s][1]
         }
-
-        return "q" + Math.min(8, ~~(county[2]/total * count*4)) + "-9"; 
+        if (disp)
+            return "q" + Math.min(8, ~~(county[2]/total * count*4)) + "-9";
+        else {
+            return "q" + Math.min(8, ~~(county[1]/pct * count*4)) + "-9";
+        }
     }
     return 'q0-9'
 }
@@ -156,7 +169,7 @@ function cquantize(d) {
 function mapover(d, self){
     d3.select(self)
         .style('stroke', "#000")
-        .style('stroke-width', "2px")
+        .style('stroke-width', "3px")
     var state = state_data[d.id]
     var tooltext = "County: "+d.properties.name+", Tweet Count: 0; Tweet Pct: 0%"
     if (state) {
@@ -287,3 +300,27 @@ function hidecounties (d, self) {
             })
 
 }
+
+function renderMap(d, self) {
+    if (!zoomed) {
+        states.selectAll("path")
+            .attr("class", quantize);
+    } else {
+        counties.selectAll("path")
+            .attr("class", cquantize);
+    }
+
+}
+
+$('#count').on('click', function(e){
+    disp = true
+    renderMap();
+})
+
+$('#pct').on('click', function(e){
+    disp = false
+    renderMap();
+})
+
+
+
