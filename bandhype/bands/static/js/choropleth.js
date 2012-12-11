@@ -161,7 +161,7 @@ function mapover(d, self){
     var tooltext = "County: "+d.properties.name+", Tweet Count: 0; Tweet Pct: 0%"
     if (state) {
         tooltext = "County: "+d.properties.name+", Tweet Count: "+ state[2] +
-                    "; Tweet Pct: " + Number(state[1].toFixed(2)) + "%"
+                    "; Tweet Pct: " + Number(state[1].toFixed(2) * 100) + "%"
     }
     tooltip.text(tooltext)
         .style("visibility", "visible");
@@ -176,7 +176,7 @@ function cmapover(d, self){
     var tooltext = "County: "+d.properties.name+", Tweet Count: 0; Tweet Pct: 0%"
     if (county) {
         tooltext = "County: "+d.properties.name+", Tweet Count: "+ county[2] +
-                    "; Tweet Pct: " + Number(county[1].toFixed(2)) + "%"
+                    "; Tweet Pct: " + Number((county[1] * 100).toFixed(2)) + "%"
     }
     tooltip.text(tooltext)
         .style("visibility", "visible");
