@@ -250,15 +250,19 @@ def listencity(request):
             "SC":"45","SD":"46","TN":"47","TX":"48","UT":"49","VT":"50",
             "VA":"51","WA":"53","WV":"54","WI":"55","WY":"56"}
     state_fips = states[request.GET['state'].upper()]
+    start = int(request.GET['start'])
     query = ListenCity.objects.filter(
             city = city_name,
             state_fips = state_fips
-        ).order_by('-count')[:10]
+        ).order_by('-count')[start:start+10]
     bands = []
     for bc in query:
         band = {}
         bands.append(band)
         band["band"] = bc.band
+        print bc.band, state_fips
+        band["listen_count"] = 0
+        band["listen_pct"] = 0
         band["pct"] = bc.pct
         band["count"] = bc.count
         times = band["times"] = []

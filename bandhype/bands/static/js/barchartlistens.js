@@ -5,6 +5,8 @@ var margin = {top: 20, right: 20, bottom: 30, left: 40},
 
 // var formatPercent = d3.format(".0%");
 
+var start = 0;
+
 var x = d3.scale.ordinal()
     .rangeRoundBands([0, width], .2);
 
@@ -80,7 +82,13 @@ var ttextanchor = tsvg.append("svg:text")
 
 $('#promoter').on('click', function(e){
 
+    barchart()
   // alert($('#search').val());
+    
+});
+
+function barchart() {
+    
     $('#chart').empty();
 
     var svg = d3.select("#chart").append("svg")
@@ -93,7 +101,7 @@ $('#promoter').on('click', function(e){
     var json;
     error = true;
     var promoterlocation = $('#search').val().split(',');
-    d3.json("listencity?city=" + promoterlocation[0] + "&state=" + promoterlocation[1].replace(/\s+/g, ''), function(json) {
+    d3.json("listencity?city=" + promoterlocation[0] + "&state=" + promoterlocation[1].replace(/\s+/g, '') + "&start=" + start, function(json) {
         console.log(json)
 
         var data =[];
@@ -142,7 +150,7 @@ $('#promoter').on('click', function(e){
                     })
 
     });
-});
+}
 function gettime(d, self) {
     times = d.times
     d3.select(self).attr('class', 'bar highlight')
@@ -211,7 +219,30 @@ function gettime(d, self) {
 function showtime(d, self) {
     d3.select(self).attr('r', 8)
     cd = d[0]
-    tooltext = "Tweet Percentage: " + Number((d[2]*100).toFixed(2)) + "%"
+    tooltext = "Tweet Percentage: " + Number((d[1]*100).toFixed(2)) + "%"
     return tooltip.style("visibility", "visible")
         .text(tooltext);
+}
+
+$('#next').on('click', function(e){
+    increment()
+    barchart()
+})
+
+$('#prev').on('click', function(e){
+    if (start >= 10) {
+        decrement()
+        barchart()
+    }
+    
+})
+
+function increment () {
+    start += 10;
+}
+
+function decrement () {
+    if (start >= 10) {
+        start -= 10;
+    }
 }
