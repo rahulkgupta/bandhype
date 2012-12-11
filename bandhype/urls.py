@@ -16,10 +16,9 @@ urlpatterns = patterns('',
     url(r'^states$', 'bands.views.states'),
     url(r'^unemployment$', 'bands.views.unemployment'),
 
-    url(r'^countrypop$', 'bands.views.countrypop'),
-    url(r'^countrycounties$', 'bands.views.countrycounties'),
+    url(r'^countycount$', 'bands.views.countycount'),
     url(r'^getcity$', 'bands.views.getcity'),
-    url(r'^timeband$', 'bands.views.timeband'),
+    url(r'^statecount$', 'bands.views.statecount'),
 
     url(r'^countrylisten$', 'bands.views.countrylisten'),
     url(r'^listencity$', 'bands.views.listencity'),

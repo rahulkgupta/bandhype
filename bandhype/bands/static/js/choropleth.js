@@ -61,14 +61,13 @@ var cd
 $('#search-btn').on('click', function(e){
     band = $("#search").val()
 
-    d3.json("timeband?query=" + band, function (json) {
+    d3.json("statecount?query=" + band, function (json) {
         data = json
         json.forEach(function(d) {
             d.date = parse(d[0])
             d.count = d[1]
             d.pct = d[2]
-            d.counties = d[3]
-            d.states = d[4]
+            d.states = d[3]
         })
         cd = json[0][0]
         state_data = json[0].states
@@ -171,7 +170,7 @@ function showcounties (d, self) {
     var centroid = path.centroid(d)
     console.log(centroid)
     d3.select(self).style("visibility", "hidden")
-    d3.json("countrycounties?band=" + band + "&state=" + d.id, function (json) {
+    d3.json("countycount?band=" + band + "&state=" + d.id, function (json) {
         json.forEach(function(d) {
             d.date = parse(d[0])
             d.count = d[1]

@@ -113,23 +113,23 @@ def unemployment(request):
     data1 = json.dumps(json_data)
     return HttpResponse(json_data , mimetype="application/json")
 
-def countrypop(request):
-    band_name = request.GET['query']
-    print band_name 
-    bandcounties = BandState.objects.filter(band=band_name)
-    counties = {}
-    for bc in bandcounties:
-        county = str(bc.state_fips)
-        if len(county) == 4:
-            print county
-            county = str(0) + county
-        bc_county = counties[county] = []
-        for time_count in bc.times:
-            counties[county].append((time_count.time, time_count.pct, time_count.count))
-        bc_county.sort(key=lambda time_count: time_count[0])
-    return HttpResponse(json.dumps(counties, indent=2), mimetype="application/json")
+# def statecount(request):
+#     band_name = request.GET['query']
+#     print band_name 
+#     bandcounties = BandState.objects.filter(band=band_name)
+#     counties = {}
+#     for bc in bandcounties:
+#         county = str(bc.state_fips)
+#         if len(county) == 4:
+#             print county
+#             county = str(0) + county
+#         bc_county = counties[county] = []
+#         for time_count in bc.times:
+#             counties[county].append((time_count.time, time_count.pct, time_count.count))
+#         bc_county.sort(key=lambda time_count: time_count[0])
+#     return HttpResponse(json.dumps(counties, indent=2), mimetype="application/json")
 
-def countrycounties(request):
+def countycount(request):
     band_name = request.GET['band']
     state = request.GET['state']
     print band_name 
@@ -146,16 +146,15 @@ def countrycounties(request):
         times.sort(key=lambda time_count: time_count[0])
     return HttpResponse(json.dumps(times, indent=2), mimetype="application/json")
 
-def timeband(request):
+def statecount(request):
     band_name = request.GET['query'].lower()
     query = Band.objects.get(band=band_name)
-    bandcounties = BandCounty.objects.filter(band=band_name)
     bandstates = BandState.objects.filter(band=band_name)
     times = []
     for time in query.times:
         counties = {}
         states = {}
-        times.append((time.time, time.count, time.pct, counties, states))
+        times.append((time.time, time.count, time.pct, states))
         for bc in bandstates:
             for state_time in bc.times:
                 if state_time.time == time.time:
