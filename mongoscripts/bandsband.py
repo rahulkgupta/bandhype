@@ -10,25 +10,28 @@ bands_band = db['bands_listen']
 bands = {}
 with open(os.path.abspath(os.path.join(os.path.dirname(__file__), 'bt_f.txt')), 'r') as read_file:
         for line in read_file:
-            arr = line.split(';')
-            band_name = ""
-            time = ""
-            count = 0
-            pct = 0
-            pos = 0
-            band_name = arr[0]
-            time = arr[1]
-            count = int(2)
-            pct = float(3)
-
-
-            time_obj = {"count":count,"pct":pct,"time":time}
             try:
-                band = bands[band_name]
-                band["times"].append(time_obj)
-                print "found"
+                arr = line.split(';')
+                band_name = ""
+                time = ""
+                count = 0
+                pct = 0
+                pos = 0
+                band_name = arr[0]
+                time = arr[1]
+                count = int(arr[2])
+                pct = float(arr[3])
+
+                print count, pct
+                time_obj = {"count":count,"pct":pct,"time":time}
+                try:
+                    band = bands[band_name]
+                    band["times"].append(time_obj)
+                    print "found"
+                except:
+                    bands[band_name] = {"band": band_name, "times" : [time_obj]}
             except:
-                bands[band_name] = {"band": band_name, "times" : [time_obj]}
+                print "nahhhh"
 
 for band_name in bands:
     band = bands[band_name]

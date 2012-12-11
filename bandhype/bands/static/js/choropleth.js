@@ -313,11 +313,15 @@ function renderMap(d, self) {
 }
 
 $('#count').on('click', function(e){
+    $("#count").toggleClass('active')
+    $("#pct").toggleClass('active')
     disp = true
     renderMap();
 })
 
 $('#pct').on('click', function(e){
+    $("#count").toggleClass('active')
+    $("#pct").toggleClass('active')
     disp = false
     renderMap();
 })

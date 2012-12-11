@@ -20,6 +20,9 @@ urlpatterns = patterns('',
     url(r'^getcity$', 'bands.views.getcity'),
     url(r'^statecount$', 'bands.views.statecount'),
 
+    url(r'^countylisten$', 'bands.views.countylisten'),
+    url(r'^statelisten$', 'bands.views.statelisten'),
+
     url(r'^countrylisten$', 'bands.views.countrylisten'),
     url(r'^listencity$', 'bands.views.listencity'),
     url(r'^timelisten$', 'bands.views.timelisten'),

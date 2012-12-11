@@ -114,6 +114,10 @@
         data-provide="typeahead"
         data-source="{{bands}}"/> 
       <button id="search-btn" class = "btn btn-info">Generate Map</button>
+      <div class="btn-group">
+        <button id="count" class="btn active">Count</button>
+        <button id="pct" class="btn">Percentage</button>
+      </div>
       <h2>Geographic Distribution</h2>
       <div id="chart"></div>
       <h2>Time Series</h2>
@@ -132,8 +136,9 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="{{STATIC_URL}}js/jquery.js"></script>
-
+    <script type="text/javascript" src="{{STATIC_URL}}js/timeseries.js"></script>
     <script type="text/javascript" src="{{STATIC_URL}}js/choroplethlistens.js"></script>
+    <script type="text/javascript" src="{{STATIC_URL}}js/bands.js"></script>
     <script src="{{STATIC_URL}}js/bootstrap-transition.js"></script>
     <script src="{{STATIC_URL}}js/bootstrap-alert.js"></script>
     <script src="{{STATIC_URL}}js/bootstrap-modal.js"></script>
