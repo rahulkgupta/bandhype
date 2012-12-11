@@ -33,7 +33,7 @@ d3.json("counties", function(json) {
         .data(json.features)
         .enter().append("path")
         .attr("class", (county_data & cd) ? cquantize : null)
-        .on("mouseover", function(d){mapover(d, this)})
+        .on("mouseover", function(d){cmapover(d, this)})
         .on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
         .on("click", function(d) {hidecounties (d, this)})
         .on("mouseout", function(){
@@ -50,7 +50,15 @@ d3.json("states", function(json) {
         .data(json.features)
         .enter().append("path")
         .attr("class", (state_data & cd) ? quantize : null)
+        .on("mouseover", function(d){mapover(d, this)})
+        .on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
         .on("click", function (d) {showcounties(d, this)})
+        .attr("d", path)
+        .on("mouseout", function(){
+            d3.select(this)
+                .style('stroke', "#fff")
+                .style('stroke-width', '.25px')
+            return tooltip.style("visibility", "hidden");})
         .attr("d", path);
 
 });
@@ -144,20 +152,31 @@ function cquantize(d) {
     }
     return 'q0-9'
 }
-// Function when user hovers county in the map
+
 function mapover(d, self){
     d3.select(self)
         .style('stroke', "#000")
         .style('stroke-width', "2px")
-    var days = county_data[d.id]
+    var state = state_data[d.id]
     var tooltext = "County: "+d.properties.name+", Tweet Count: 0; Tweet Pct: 0%"
-    if (days) {
-        for (var i = 0; i < days.length; i++) {
-            if (days[i][0] == cd) {
-                tooltext = "County: "+d.properties.name+", Tweet Count: "+ days[i][2] +
-                        "; Tweet Pct: " + Number((days[i][1]*100).toFixed(2)) + "%"
-            }   
-        }
+    if (state) {
+        tooltext = "County: "+d.properties.name+", Tweet Count: "+ state[2] +
+                    "; Tweet Pct: " + Number(state[1].toFixed(2)) + "%"
+    }
+    tooltip.text(tooltext)
+        .style("visibility", "visible");
+};
+
+// Function when user hovers county in the map
+function cmapover(d, self){
+    d3.select(self)
+        .style('stroke', "#000")
+        .style('stroke-width', "2px")
+    var county = county_data[d.id]
+    var tooltext = "County: "+d.properties.name+", Tweet Count: 0; Tweet Pct: 0%"
+    if (county) {
+        tooltext = "County: "+d.properties.name+", Tweet Count: "+ county[2] +
+                    "; Tweet Pct: " + Number(county[1].toFixed(2)) + "%"
     }
     tooltip.text(tooltext)
         .style("visibility", "visible");
