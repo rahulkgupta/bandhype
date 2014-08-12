@@ -18,5 +18,3 @@ The packages needed can be found and edited in requirements.txt
 Use pip (or sudo pip) install -r requirements.txt
 
 Then, you're good to go with django.
-
-http://fierce-atoll-8542.herokuapp.com/
